@@ -18,7 +18,7 @@ class Category(models.Model):
     modified = ModificationDateTimeField()
 
     def __str__(self):
-        return self.category_name
+        return self.name
 
 # таблица "Изображения товаров"
 class Images(models.Model):
@@ -27,7 +27,7 @@ class Images(models.Model):
     modified = ModificationDateTimeField()
 
     def __str__(self):
-        return self.images_name
+        return self.name
 
 # таблица "Поставщики"
 class Suppliers(models.Model):

@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from django.shortcuts import render
 from eshop.models.products import Product
-from eshop.models.cutomers import Customers
+from eshop.models.customers import Customers
 from eshop.models.orders import Orders
 from eshop.models.catalog import Catalog
 

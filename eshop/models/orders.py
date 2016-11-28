@@ -10,7 +10,7 @@ from model_utils import Choices
 #     STATUS = Choices('draft', 'published')
 
 from eshop.models.products import Product
-from eshop.models.cutomers import Customers, Shipments, Payments
+from eshop.models.customers import Customers, Shipments, Payments
 from eshop.models.catalog import Catalog
 
 # Таблица "Заказы"
