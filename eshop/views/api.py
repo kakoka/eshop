@@ -5,14 +5,11 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
+from rest_framework import generics
 from django.shortcuts import render
-from eshop.models import Product
+from eshop.models.products import Product
+from eshop.serializers import ProductListSerializer
 
-# Create your views here.
-
-def show(request):
-    if request.method == "GET":
-        products = Product.objects.all()
-        return render(request, 'eshop/index.html', {'products': products})
-    return HttpResponse(status=405)
-
+class ProductList(generics.ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductListSerializer

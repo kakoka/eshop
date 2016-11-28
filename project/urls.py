@@ -17,14 +17,24 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 
-# from eshop app
-from eshop import urls as eshop_urls
-from eshop.views import show
+# all needed urls for e-shop
+
+import eshop.urls.site
+import eshop.urls.api
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # url(r'^api/', include('eshop.urls'))
-    url(r'^show/', show, name='show'),
+
+    # common url for producs operations
+    url(r'^products/', include('eshop.urls.site')),
+
+    # url(r'^show/', show, name='show'),
+
+    # suppliers
+    # url(r'^suppliers/', include('eshop.urls.suppliers')),
+
+    # common url for api
+    url(r'^api/', include('eshop.urls.api', namespace='rest_framework')),
 ]
 
 if settings.DEBUG:

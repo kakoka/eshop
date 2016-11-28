@@ -1,0 +1,206 @@
+[
+	{
+    "model": "eshop.Images",
+    "id": "1",
+    "fields": {
+      "name": "person_test_1.png",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  {
+    "model": "eshop.Images",
+    "id": "2",
+    "fields": {
+      "name": "product_test_1.png",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  	{
+    "model": "eshop.Images",
+    "id": "3",
+    "fields": {
+      "name": "person_test_2.png",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  	{
+    "model": "eshop.Images",
+    "id": "4",
+    "fields": {
+      "name": "person_test_3.png",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+    {
+    "model": "eshop.Images",
+    "id": "5",
+    "fields": {
+      "name": "product_test_2.png",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+{
+    "model": "eshop.Category",
+    "id": "1",
+    "fields": {
+      "un_category": "1",
+      "name": "Газеты",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  {
+    "model": "eshop.Category",
+    "id": "2",
+    "fields": {
+      "un_category": "1",
+      "name": "Газеты ежедневные",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+    {
+    "model": "eshop.Category",
+    "id": "3",
+    "fields": {
+      "un_category": "1",
+      "name": "Газеты еженедельные",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  {
+    "model": "eshop.Category",
+    "id": "4",
+    "fields": {
+      "un_category": "4",
+      "name": "Журналы",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  {
+    "model": "eshop.Category",
+    "id": "5",
+    "fields": {
+      "un_category": "4",
+      "name": "Журналы еженедельные",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+    {
+    "model": "eshop.Category",
+    "id": "6",
+    "fields": {
+      "un_category": "4",
+      "name": "Журналы ежемесячные",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22 14:00"
+    }
+  },
+  {
+    "model": "eshop.Suppliers",
+    "id": "1",
+    "fields": {
+      "is_organisation": "False",
+      "firstname": "Igor",
+      "lastname": "Kamenev",
+      "organization_name": "none",
+      "image": ["1"],
+      "email": "igor.kamenev@yandex.ru",
+      "phone": "+79262333223",
+      "address": "Mozhaiskoe shosse 39-12",
+      "notes": "working days - mon-fri",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+    {
+    "model": "eshop.Suppliers",
+    "id": "2",
+    "fields": {
+      "is_organisation": "True",
+      "firstname": "none",
+      "lastname": "none",
+      "organization_name": "Flowers",
+      "image": ["1"],
+      "email": "flowers_19@yandex.ru",
+      "phone": "+79264433223",
+      "address": "Pyatnitskoe shosse 11-12",
+      "notes": "working days - mon-sat",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+ {
+    "model": "eshop.Suppliers",
+    "id": "3",
+    "fields": {
+      "is_organisation": "False",
+      "firstname": "Matvey",
+      "lastname": "Nartus",
+      "organization_name": "none",
+      "image": ["1"],
+      "email": "matv.n@yandex.ru",
+      "phone": "+79269569865",
+      "address": "Pytnitskaya street 12",
+      "notes": "working days - mon-sun",
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  {
+    "model": "eshop.Product",
+    "id": "1",
+    "fields": {
+      "supplier": "1",
+      "category": "2",
+      "image": ["1", "2"],
+      "name": "ПРАВДА",
+      "description": "газета коммунистической партии",
+	  "buy_price": 120,
+	  "sell_price": 130,
+      "quantity": 10,
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  {
+    "model": "eshop.Product",
+    "id": "2",
+    "fields": {
+      "supplier": "1",
+      "category": "2",
+      "image": ["1", "2"],
+      "name": "ИЗВЕСТИЯ",
+      "description": "демократическая газета",
+	  "buy_price": 120,
+	  "sell_price": 130,
+      "quantity": 10,
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  },
+  {
+    "model": "eshop.Product",
+    "id": "3",
+    "fields": {
+      "supplier": "1",
+      "category": "5",
+      "image": ["1", "2"],
+      "name": "Аргументы и Факты",
+      "description": "old fashioned Gazeta",
+	  "buy_price": 120,
+	  "sell_price": 130,
+      "quantity": 10,
+      "created": "2016-11-22T16:16+03:00",
+      "modified": "2016-11-22T17:00+03:00"
+    }
+  }
+]
