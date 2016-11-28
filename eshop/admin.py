@@ -1,5 +1,5 @@
 from django.contrib import admin
-
+from django.utils.html import format_html
 #my models
 
 from eshop.models.products import *
@@ -22,7 +22,6 @@ class AddressAdmin(admin.ModelAdmin):
         'street',
     )
     list_filter = (
-        'id',
         'street',
     )
     list_editable = (
@@ -52,11 +51,39 @@ class CategoryAdmin(admin.ModelAdmin):
     )
     list_per_page = 25
 
+
+
+class AdminProduct(admin.ModelAdmin):
+    list_display = (
+        'get_supplier',
+        'get_category',
+        'name',
+        'description',
+        'get_image'
+
+    )
+
+    def get_supplier(self, obj):
+        return '\n'.join([d.firstname for d in obj.supplier.all()])
+
+    def get_category(self, obj):
+        return obj.category.name
+
+    def get_image(self, obj):
+        return '\n'.join([c.image for c in obj.image.title.all()])
+
+        # return obj.image.id
+        # return format_html('<img src="{}" />'.format(obj.image.url))
+
+    # def get_image(self, obj):
+    #     return '\n'.join([d.name for d in obj.image.all()])
+
+
 # products
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Images)
 admin.site.register(Suppliers)
-admin.site.register(Product)
+admin.site.register(Product, AdminProduct)
 
 # catalog
 admin.site.register(Catalog)

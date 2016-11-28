@@ -25,12 +25,20 @@ class Orders(models.Model):
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
+    class Meta:
+        verbose_name = 'Orders'
+        verbose_name_plural = 'Orders'
+
     def __str__(self):
         return self._order
 
 # таблица "Статус заказа"
 class OrderStatus(models.Model):
     status = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name = 'Order status'
+        verbose_name_plural = 'Order status'
 
 
 

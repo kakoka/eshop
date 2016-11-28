@@ -27,6 +27,10 @@ class Customers(models.Model):
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
+    class Meta:
+        verbose_name = 'Customers'
+        verbose_name_plural = 'Customers'
+
 # Таблица "Адрес доставки"
 class Address(models.Model):
     street = models.CharField(max_length=50)
@@ -34,6 +38,10 @@ class Address(models.Model):
     appartment = models.CharField(max_length=50)
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
+
+    class Meta:
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresses'
 
     def __str__(self):
         return self.street
@@ -44,6 +52,15 @@ class Shipments(models.Model):
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
+    class Meta:
+        verbose_name = 'Shipments'
+        verbose_name_plural = 'Shipments'
+
+
 # таблица "Метод оплаты"
 class Payments(models.Model):
     payment = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name = 'Paymets'
+        verbose_name_plural = 'Payments'
