@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.db.models import Manager
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+
 from model_utils.models import StatusModel
 from model_utils import Choices
 
@@ -37,9 +40,15 @@ class ImageManager(Manager):
     def get_queryset(self, **kwargs):
         return super(ImageManager, self).get_queryset().all()
 
-class Images(models.Model):
-    title = models.CharField(max_length=255)
-    file = models.ImageField(upload_to='img/upload', editable=False, blank=False, null=False, default='blank_img.gif')
+class Image(models.Model):
+
+    name = models.TextField()
+    image = models.ImageField(upload_to='img/upload', blank=True, null=True)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_obj = GenericForeignKey('content_type', 'object_id')
+
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
@@ -51,13 +60,19 @@ class Images(models.Model):
         verbose_name_plural = 'Images'
 
     def __str__(self):
-        return self.title, self.file, self.file.url
+        return self.name
 
-    def image_tag(self):
-        if self.file:
-            return u'<img src="%s" />' % self.file.url
-        else:
-            return '(none)'
+    # def image_tag(self):
+    #     if self.file:
+    #         return u'<img src="%s" />' % self.file.url
+    #     else:
+    #         return '(none)'
+
+    def save(self):
+        # Don't save if there is no image (since core field is always set).
+        if not self.id and not self.image:
+            return
+        super(Image, self).save()
 
 class SupplierManager(Manager):
     def get_queryset(self, **kwargs):
@@ -69,13 +84,14 @@ class Suppliers(models.Model):
     firstname = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50)
     organization_name = models.CharField(max_length=50)
-    image = models.ManyToManyField('Images', related_name='suppliers_photos')
     email = models.EmailField(max_length=50, unique=True)
     phone = models.CharField(max_length=30)
     address = models.CharField(max_length=50)
     notes = models.TextField(blank=True, default='')
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
+
+    image = GenericRelation('Image')
 
     objects = Manager()
     supplier_manager = SupplierManager()
@@ -98,7 +114,9 @@ class ProductManager(Manager):
 class Product(models.Model):
     supplier = models.ManyToManyField('Suppliers', related_name='suppliers_name', blank=False)
     category = models.ForeignKey('Category', related_name='product_category', blank=False)
-    image = models.ManyToManyField('Images', related_name='product_photos', blank=False)
+
+    image = GenericRelation('Image', blank=True)
+
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, default='')
     buy_price = models.DecimalField(max_digits=9, decimal_places=2)

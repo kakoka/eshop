@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group, Permission
-from eshop.models.products import Product, Images, Category, Suppliers
+from eshop.models.products import Product, Image, Category, Suppliers
 from rest_framework import serializers
 
 class ProductListSerializer(serializers.ModelSerializer):
