@@ -57,11 +57,12 @@ class ImageInline(admin.StackedInline):
 
 class AdminProduct(admin.ModelAdmin):
     list_display = (
-        'get_supplier',
-        'get_category',
         'name',
         'description',
         'get_image',
+        'get_category',
+        'get_supplier',
+        
     )
     # inlines = [
     #     ImageInline,
