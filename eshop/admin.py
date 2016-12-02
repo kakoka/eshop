@@ -1,73 +1,49 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.contrib.contenttypes.admin import GenericTabularInline, GenericStackedInline
 
 #my models
 
-from eshop.models.products import *
+from eshop.models.products import Category, Image, Suppliers, Product
 from eshop.models.customers import *
 from eshop.models.orders import *
 from eshop.models.catalog import *
 
 # Register your models here.
 
-class AddressAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'street',
-        'building',
-        'appartment',
-        'created',
-        'modified',
+class AdminAddress(admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            'fields': ('street', 'building', 'appartment'),
+        }),
     )
     search_fields = (
         'street',
-    )
-    list_filter = (
-        'street',
-    )
-    list_editable = (
-        'street',
-        'building',
-        'appartment',
     )
     list_per_page = 50
 
-class CategoryAdmin(admin.ModelAdmin):
+class AdminCategory(admin.ModelAdmin):
     list_display = (
-        'id',
-        'un_category',
         'name',
-        'created',
-        'modified',
+        'un_cat',
     )
-    search_fields = (
-        'name',
-    )
-    list_filter = (
-        'name',
-    )
-    list_editable = (
-        'un_category',
-        'name',
-    )
-    list_per_page = 25
-
-class ImageInline(admin.StackedInline):
-    model = Image
+    # list_editable = (
+    #     'un_cat',
+    # )
+    def un_cat(self, obj):
+        return obj.un_category
 
 class AdminProduct(admin.ModelAdmin):
+
     list_display = (
         'name',
         'description',
-        'get_image',
+        # 'get_image',
         'get_category',
         'get_supplier',
-        
     )
-    # inlines = [
-    #     ImageInline,
-    #     ]
-    # save_as = True
+
+    save_as = True
 
     # many-to-many
     def get_supplier(self, obj):
@@ -75,19 +51,12 @@ class AdminProduct(admin.ModelAdmin):
     # foreign key
     def get_category(self, obj):
         return obj.category.name
-    def get_image(self, obj):
-        return obj.image.all()
-
-    # def get_image(self, obj):
-    #     for i in enumerate(obj.image.title):
-    #         print(i)
-    #     return '\n'.join([c.image for c in obj.image.title])
-
-        # return obj.image.id
-        # return format_html('<img src="{}" />'.format(obj.image.url))
 
     # def get_image(self, obj):
     #     return '\n'.join([d.name for d in obj.image.all()])
+
+        # return obj.image.id
+        # return format_html('<img src="{}" />'.format(obj.image.url))
 
 class AdminImage(admin.ModelAdmin):
 
@@ -96,37 +65,38 @@ class AdminImage(admin.ModelAdmin):
         'image',
         'content_type',
     )
-    # list_display_links = (
-    #     'title',
-    #     'img_content_type',
-    #     'image_id',
-    #     'image_file',
-    #     'image_obj',
-    # )
+class AdminSupplier(admin.ModelAdmin):
+    list_display = (
+        'firstname',
+        'lastname',
+        'organization_name',
+        'is_organisation',
+    )
+    pass
+    list_filter = (
+        'is_organisation',
+    )
 
-    # list_editable = (
-    #     'title',
-    #     'content_type',
-    #     'image_id',
-    #     'image_file',
-    #     'image_obj',
-    # )
-    # inlines = [
-    #     ImagesInline,
-    # ]
+# class AddToCatalog(admin.StackedInline):
+#     model = Product
+#
+# class AdminCatalog(admin.ModelAdmin):
+#     inlines = [
+#         AddToCatalog,
+#     ]
 
 # products
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Category, AdminCategory)
 admin.site.register(Image, AdminImage)
-admin.site.register(Suppliers)
+admin.site.register(Suppliers, AdminSupplier)
 admin.site.register(Product, AdminProduct)
 
 # catalog
-admin.site.register(Catalog)
+# admin.site.register(Catalog, AdminCatalog)
 
 # customers
 admin.site.register(Customers)
-admin.site.register(Address, AddressAdmin)
+admin.site.register(Address, AdminAddress)
 admin.site.register(Shipments)
 admin.site.register(Payments)
 
