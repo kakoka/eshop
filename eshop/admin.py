@@ -76,7 +76,8 @@ class AdminProduct(admin.ModelAdmin):
     def get_category(self, obj):
         return obj.category.name
     def get_image(self, obj):
-        return obj.image.all()
+        return '<img src="%s">' % obj.image.first().url
+    get_image.allow_tags = True
 
     # def get_image(self, obj):
     #     for i in enumerate(obj.image.title):
