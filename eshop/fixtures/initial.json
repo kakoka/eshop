@@ -1,7 +1,6 @@
 [
 	{
-    "model": "eshop.Images",
-    "id": "1",
+    "model": "eshop.Image",
     "fields": {
       "name": "person_test_1.png",
       "created": "2016-11-22T16:16+03:00",
@@ -9,8 +8,7 @@
     }
   },
   {
-    "model": "eshop.Images",
-    "id": "2",
+    "model": "eshop.Image",
     "fields": {
       "name": "product_test_1.png",
       "created": "2016-11-22T16:16+03:00",
@@ -18,8 +16,7 @@
     }
   },
   	{
-    "model": "eshop.Images",
-    "id": "3",
+    "model": "eshop.Image",
     "fields": {
       "name": "person_test_2.png",
       "created": "2016-11-22T16:16+03:00",
@@ -27,8 +24,7 @@
     }
   },
   	{
-    "model": "eshop.Images",
-    "id": "4",
+    "model": "eshop.Image",
     "fields": {
       "name": "person_test_3.png",
       "created": "2016-11-22T16:16+03:00",
@@ -36,8 +32,7 @@
     }
   },
     {
-    "model": "eshop.Images",
-    "id": "5",
+    "model": "eshop.Image",
     "fields": {
       "name": "product_test_2.png",
       "created": "2016-11-22T16:16+03:00",

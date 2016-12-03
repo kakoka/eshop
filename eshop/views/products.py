@@ -5,6 +5,9 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import FormView
+
 from django.shortcuts import render
 from eshop.models.products import Product
 from eshop.models.customers import Customers
@@ -33,5 +36,16 @@ def list_customers(request):
 #
 #         return render(request, 'eshop/list_products.html', {'product': product})
 #     return HttpResponse(status=405)
+
+class Registration(FormView):
+    template_name = 'eshop/register.html'
+    form_class = UserCreationForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        # This method is called when valid form data has been POSTed.
+        # It should return an HttpResponse.
+        form.save()
+        return super(Registration, self).form_valid(form)
 
 

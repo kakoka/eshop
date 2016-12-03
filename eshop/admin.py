@@ -33,8 +33,15 @@ class AdminCategory(admin.ModelAdmin):
     def un_cat(self, obj):
         return obj.un_category
 
-class AdminProduct(admin.ModelAdmin):
+class InlineImage(GenericTabularInline):
+    model = Image
+    list_display = (
+        'name',
 
+    )
+
+class AdminProduct(admin.ModelAdmin):
+    inlines = [InlineImage]
     list_display = (
         'name',
         'description',
@@ -51,18 +58,16 @@ class AdminProduct(admin.ModelAdmin):
     # foreign key
     def get_category(self, obj):
         return obj.category.name
-<<<<<<< HEAD
-    def get_image(self, obj):
-        return '<img src="%s">' % obj.image.first().url
-    get_image.allow_tags = True
-=======
->>>>>>> 987c75e9d0d15aae4d614addf2bb589f7629ce35
-
+    # image get
     # def get_image(self, obj):
-    #     return '\n'.join([d.name for d in obj.image.all()])
+    #     return '<img src="%s">' % obj.image.first().url
+    # get_image.allow_tags = True
 
+    def get_image(self, obj):
+        # return '\n'.join([d.name for d in obj.image.all()])
+        #
         # return obj.image.id
-        # return format_html('<img src="{}" />'.format(obj.image.url))
+        return format_html('<img src="{}" />'.format(obj.image.url))
 
 class AdminImage(admin.ModelAdmin):
 
@@ -83,13 +88,25 @@ class AdminSupplier(admin.ModelAdmin):
         'is_organisation',
     )
 
-# class AddToCatalog(admin.StackedInline):
-#     model = Product
-#
-# class AdminCatalog(admin.ModelAdmin):
-#     inlines = [
-#         AddToCatalog,
-#     ]
+class AddToCatalog(admin.StackedInline):
+    model = Product
+    list_display = (
+        'name'
+    )
+
+#django-cart!
+
+class AdminCatalog(admin.ModelAdmin):
+    list_display = (
+        'get_product',
+    )
+    pass
+    def get_product(self, obj):
+        return obj.item
+
+        # inlines = [
+    #     AddToCatalog,
+    # ]
 
 # products
 admin.site.register(Category, AdminCategory)
@@ -98,7 +115,7 @@ admin.site.register(Suppliers, AdminSupplier)
 admin.site.register(Product, AdminProduct)
 
 # catalog
-# admin.site.register(Catalog, AdminCatalog)
+admin.site.register(Catalog, AdminCatalog)
 
 # customers
 admin.site.register(Customers)

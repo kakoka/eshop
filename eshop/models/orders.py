@@ -30,7 +30,7 @@ class Orders(models.Model):
         verbose_name_plural = 'Orders'
 
     def __str__(self):
-        return self._order
+        return str(self.id)
 
 # таблица "Статус заказа"
 class OrderStatus(models.Model):
