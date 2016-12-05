@@ -461,3 +461,7 @@ input{
 }
 
 /* ----- End of Footer ----- */
+
+.input_withd {
+    width: 50px; /* Ширина в пикселах */
+}

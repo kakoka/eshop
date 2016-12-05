@@ -21,7 +21,8 @@
     "jquery": "~2.2.2",
     "jquery-ui": "~1.12.1",
     "bootstrap": "3.3.7",
-    "vue": "2.0.5"
+    "vue": "2.0.5",
+    "shopify-cartjs": "0.4.0"
   }
 }
 
