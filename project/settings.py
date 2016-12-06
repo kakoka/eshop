@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # 'url_tools',
     'debug_toolbar',
     # www e-shop project app
+    'carton',
     'eshop',
 ]
 
@@ -139,6 +140,8 @@ STATICFILES_DIRS = [
     'static/',
     'bower_components/'
 ]
+
+CART_PRODUCT_MODEL = 'eshop.models.products.Product'
 
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10

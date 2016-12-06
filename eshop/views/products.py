@@ -9,12 +9,43 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import FormView
 
 from django.shortcuts import render
+from carton.cart import Cart
 from eshop.models.products import Product, Category
 from eshop.models.customers import Customers
 from eshop.models.orders import Orders
 from eshop.models.catalog import Catalog
-
+# from django.utils import simplejson
+# from jsonify.decorators import ajax_request
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
+
+@csrf_exempt
+# @ajax_request
+def add(request):
+    cart = Cart(request.session)
+    for i in cart.items:
+        name = i.product
+        qwt = i.product.quantity
+        product = Product.objects.get(name=name)
+        cart.add(product, price=product.sell_price, quantity=qwt)
+
+        # print(product)
+    # id = request.POST.get('item_name_1')
+    # product = Product.objects.get(name=request.POST.get('item_name_1'))
+    # print(product, product.pk)
+    # cart.add(product, price=product.sell_price)
+    print(cart)
+    return HttpResponse("Added")
+
+def remove(request):
+    cart = Cart(request.session)
+    product = Product.objects.get(id=request.POST.get('id'))
+    cart.remove(product)
+    return HttpResponse("Removed")
+
+def show(request):
+    return render(request, 'templatemo_045_christmas/index.html')
+
 
 def list_products(request):
     if request.method == "GET":
