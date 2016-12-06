@@ -3,10 +3,13 @@ from django.utils.html import format_html
 
 #my models
 
+
 from eshop.models.products import *
 from eshop.models.customers import *
 from eshop.models.orders import *
 from eshop.models.catalog import *
+
+from sorl.thumbnail.admin import AdminImageMixin
 
 # Register your models here.
 
@@ -52,7 +55,7 @@ class CategoryAdmin(admin.ModelAdmin):
     )
     list_per_page = 25
 
-class ImageInline(admin.StackedInline):
+class ImageInline(AdminImageMixin, admin.ModelAdmin):
     model = Image
 
 class AdminProduct(admin.ModelAdmin):
@@ -62,11 +65,11 @@ class AdminProduct(admin.ModelAdmin):
         'get_image',
         'get_category',
         'get_supplier',
-        
+
     )
-    # inlines = [
-    #     ImageInline,
-    #     ]
+    inlines = [
+         ImageInline,
+         ]
     # save_as = True
 
     # many-to-many
@@ -111,9 +114,9 @@ class AdminImage(admin.ModelAdmin):
     #     'image_file',
     #     'image_obj',
     # )
-    # inlines = [
-    #     ImagesInline,
-    # ]
+    inlines = [
+        ImageInline,
+    ]
 
 # products
 admin.site.register(Category, CategoryAdmin)

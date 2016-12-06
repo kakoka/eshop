@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from sorl.thumbnail import ImageField as ImageField
+
 from django.db.models import Manager
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -11,7 +13,6 @@ from model_utils import Choices
 
 # class Article(StatusModel):
 #     STATUS = Choices('draft', 'published')
-
 
 # "Категории товаров"
 class CategoryManager(Manager):
@@ -43,7 +44,7 @@ class ImageManager(Manager):
 class Image(models.Model):
 
     name = models.TextField()
-    image = models.ImageField(upload_to='img/upload', blank=True, null=True)
+    image = ImageField(upload_to='img/upload', blank=True, null=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
