@@ -18,4 +18,4 @@ class Catalog(models.Model):
     class Meta:
         pass
     def __str__(self):
-        return self.id
+        return str(self.id)

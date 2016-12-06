@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from sorl.thumbnail import ImageField as ImageField
-
 from django.db.models import Manager
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -13,6 +11,7 @@ from model_utils import Choices
 
 # class Article(StatusModel):
 #     STATUS = Choices('draft', 'published')
+
 
 # "Категории товаров"
 class CategoryManager(Manager):
@@ -34,7 +33,7 @@ class Category(models.Model):
         ordering = ('name', )
 
     def __str__(self):
-        return self.id
+        return self.name
 
 # "Изображения товаров"
 class ImageManager(Manager):
@@ -43,8 +42,8 @@ class ImageManager(Manager):
 
 class Image(models.Model):
 
-    name = models.TextField()
-    image = ImageField(upload_to='img/upload', blank=True, null=True)
+    name = models.SlugField()
+    image = models.ImageField(upload_to='img/upload', blank=True, null=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -92,8 +91,6 @@ class Suppliers(models.Model):
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
-    image = GenericRelation('Image')
-
     objects = Manager()
     supplier_manager = SupplierManager()
 
@@ -103,7 +100,7 @@ class Suppliers(models.Model):
         ordering = ('firstname', )
 
     def __str__(self):
-        return self.id
+        return self.firstname
 
 # "Товары"
 
@@ -113,10 +110,9 @@ class ProductManager(Manager):
 
 
 class Product(models.Model):
+
     supplier = models.ManyToManyField('Suppliers', related_name='suppliers_name', blank=False)
     category = models.ForeignKey('Category', related_name='product_category', blank=False)
-
-    image = GenericRelation('Image', blank=True)
 
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, default='')
@@ -130,16 +126,16 @@ class Product(models.Model):
     objects = Manager()
     product_manager = ProductManager()
 
-    class Meta:
-        ordering = ('name',)
+    # class Meta:
+    #     ordering = ('name',)
+
+    # def save(self, **kwargs):
+    #     if not self.pk:
+    #         print('Creating new product')
+    #     else:
+    #         print('Updating the existing one')
+    #     super(Product, self).save(**kwargs)
 
     def __str__(self):
-        return 'Product [%s]' % self.id
+        return self.name
 
-    def save(self, **kwargs):
-        if not self.pk:
-            print('Creating new product')
-        else:
-            print('Updating the existing one')
-
-        super(Product, self).save(**kwargs)

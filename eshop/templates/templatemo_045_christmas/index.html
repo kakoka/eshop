@@ -1,0 +1,161 @@
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<link>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Christmas again!</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+    <link rel="stylesheet" href="{% static 'css/templatemo_style.css' %}" type="text/css"></link>
+    <script type="application/javascript" src="{% static 'js/simplecart.js' %}"></script>
+    <script type="application/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
+</head>
+<body>
+
+<script>
+    simpleCart({
+        checkout: {
+            type: "PayPal",
+            email: "you@yours.com",
+            currency: "RUR"
+        },
+        cartColumns: [
+            { attr: "name" , label: "Наименование" } ,
+            { attr: "price" , label: "Цена", view: 'currency' } ,
+            { view: "decrement" , label: false , text: "-" } ,
+            { attr: "quantity" , label: "Кол-во" } ,
+            { view: "increment" , label: false , text: "+" } ,
+            { attr: "total" , label: "Всего", view: 'currency' } ,
+            { view: "remove" , text: "Удалить" , label: false }
+        ]
+    });
+    simpleCart.currency({
+        code: "RUR" ,
+        name: "Russian rubles" ,
+        symbol: " Руб." ,
+        delimiter: " " ,
+        decimal: "," ,
+        after: true ,
+        accuracy: 2
+    });
+</script>
+
+<div id="templatemo_container">
+	<div id="templatemo_top_panel">
+    	<!--<div id="templatemo_header">-->
+          <!--Новый-->
+        <!--</div>-->
+        <div id="templatemo_shoppingcart">
+	        <h3>Корзина покупок</h3>
+            <span class="simpleCart_quantity"></span> товара - <span class="simpleCart_total"></span>
+            <div class="simpleCart_items"></div>
+            <div class="simpleCart_total"></div>
+            <a href="javascript:;" class="simpleCart_checkout">Оформить</a>
+        </div>
+        
+    </div> <!-- end of top panel -->
+    
+    <div id="templatemo_banner">
+    	<div id="templatemo_banner_text">
+            <h1>Снова Новый год!</h1>
+            <h4>Купите шариковых, а то у вас их нет!</h4>
+            <!--<div class="more_button"><a href="#">View  All</a></div>-->
+    	</div>
+    </div> <!-- end of banner -->
+    
+    <div id="templatemo_menu">
+        <ul>
+            <li><a href="index.html"  class="current">Главная</a></li>
+            <li><a href="subpage.html">Каталог</a></li>
+            <li><a href="subpage.html">Мой профиль</a></li>
+            <li><a href="subpage.html" class="lastmenu">Контакты</a></li>
+        </ul>  
+    </div> <!-- end of menu -->
+    
+    <div id="templatemo_content">
+    
+    	<div id="templatemo_left_panel">
+        	<div class="templatemo_blue_panel">
+	             <h2>Поиск</h2>
+                 <div class="templatemo_left_content">
+                    <form method="get" action="#">
+                        <div class="form_row"><input name="email_address" type="text" class="inputfield" id="email_addremss" maxlength="60"/></div>
+                        <input class="button" type="submit" name="Search" value="Искать" />
+                    </form>
+				</div>
+            </div>
+            <div class="templatemo_blue_panel_bottom"></div>
+
+            <div class="templatemo_red_panel">
+	             <h2>Категории товаров</h2>
+                 <div class="templatemo_left_content">
+                    <ul>
+                        {% for category in categories %}
+                        <li><a href="category/ {{ category.id }}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+				</div>
+			</div>
+            <div class="templatemo_red_panel_bottom"></div>
+            
+            <div class="templatemo_yellow_panel">
+	             <h2>Новое в ассортименте</h2>
+				<div class="templatemo_left_content">
+					<h4>Product Title</h4>
+                    <img src="/static/images/image(150x150).jpg" alt="image" />
+                    <div class="templatemo_price">5.00</div>
+                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+                    <div class="more_button"><a href="#">Buy Now</a></div>                    
+				</div>
+			</div>
+            <div class="templatemo_yellow_panel_bottom"></div>
+            
+        </div> <!-- end of left panel -->
+        
+        <div id="templatemo_right_panel">
+        	<div class="templatemo_right_panel_fullwidth">
+            	<h1>Добро пожаловать!</h1>
+                <img src="/static/images/image(200x120).gif" alt="image" /> 
+                <p>В нашем новогоднем интернет магазине мы хотим предоставить покупателям то, что хотели бы получать сами: легкость и простоту в нахождении товара, реальные цены, гибкая система скидок, оперативное обслуживание и замечательный товар отечественного производства.</p>
+                <p>Наш интернет магазин торгует оптом и в розницу, а весной приглашаем всех оптовиков на совместную закупку у производителей. Ежегодно в сентябре у нас проводится предсезонная распродажа.</p>
+                <p>Осуществляется курьерская доставка заказов по Москве, МО, Питеру, Нижнему Новгороду. В Москве пятнадцать пунктов выдачи заказов, возможен самовывоз со склада в г. Мытищи и в Медведково. Заказы в регионы доставляются почтой России и транспортными компаниями.</p>
+       	  </div>
+            
+            <div class="templatemo_right_panel_fullwidth">
+            	<h1>Товары</h1>
+                <div class="productrow">
+                    {% for product in products %}
+                    <div class="productbox simpleCart_shelfItem">
+                        <div class="left"><img src="/static/images/image(110x110)01.gif" alt="image" /></div>
+                        <div class="right">
+                            <h3 class="item_name">{{ product.name }}</h3>
+                            <div class="templatemo_price">
+                                <span class="item_price">{{ product.sell_price}} руб.</span>
+                            </div>
+                            <!--<button data-cart-add="1">Add Product</button>-->
+                            <input type="text" class="input_withd" size="3" value="1" class="item_Quantity">
+                            <div class="addtocard_btn"><a class="item_add" href="javascript:;">Add to cart</a></div>
+                            <!--<div class="more_button"><a href="subpage.html">Detail</a></div>-->
+                        </div>
+                    </div>
+
+                    {% endfor %}
+				</div>
+            </div>
+            
+		<div class="templatemo_right_panel_fullwidth">
+        </div> <!-- end of right panel -->         
+
+    </div> <!-- end of content -->
+	<div id="templatemo_content_bottom">
+    </div>
+    
+    <div id="templatemo_footer">
+        <a href="#">Home</a> | <a href="#">Services</a> | <a href="#">Products</a> | <a href="#">Special</a> | <a href="#">My Account</a> | <a href="#">Contact Us</a><br />
+        Copyright © 2008 <a href="#"><strong>Your Company Name</strong></a> 
+        <!-- Credit: www.templatemo.com -->
+    </div> <!-- end of footer -->
+</div> <!-- end of container -->
+</body>
+</html>

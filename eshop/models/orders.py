@@ -15,7 +15,7 @@ from eshop.models.catalog import Catalog
 
 # Таблица "Заказы"
 class Orders(models.Model):
-    catalog = models.ManyToManyField('Catalog', related_name="order_catalog", null=False)
+    # catalog = models.ManyToManyField('Catalog', related_name="order_catalog", null=False)
     customer = models.ForeignKey('Customers')
     shipment = models.ForeignKey('Shipments')
     payment = models.ForeignKey('Payments')
@@ -30,7 +30,7 @@ class Orders(models.Model):
         verbose_name_plural = 'Orders'
 
     def __str__(self):
-        return self._order
+        return str(self.id)
 
 # таблица "Статус заказа"
 class OrderStatus(models.Model):
