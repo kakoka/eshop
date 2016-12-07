@@ -36,7 +36,7 @@ class AdminCategory(admin.ModelAdmin):
 class InlineImage(GenericTabularInline):
     model = Image
     list_display = (
-        'name',
+        'image',
 
     )
 
@@ -73,7 +73,7 @@ class AdminProduct(admin.ModelAdmin):
         return format_html('<img src="{}" />'.format(obj.image.url))
 
 class AdminImage(admin.ModelAdmin):
-    fields = ('image_tag', 'name', 'image', 'externalURL',)
+    fields = ('image_tag', 'image', 'externalURL',)
     readonly_fields = ('image_tag',)
 
 class AdminSupplier(admin.ModelAdmin):
@@ -91,7 +91,7 @@ class AdminSupplier(admin.ModelAdmin):
 class AddToCatalog(admin.StackedInline):
     model = Product
     list_display = (
-        'name'
+        'image'
     )
 
 #django-cart!

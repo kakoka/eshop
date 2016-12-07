@@ -45,7 +45,7 @@ class ImageManager(Manager):
 
 class Image(models.Model):
 
-    name = models.SlugField()
+    # name = models.SlugField()
     image = models.ImageField(upload_to=settings.MEDIA_ROOT, blank=True, null=True)
     externalURL = models.URLField(blank=True)
 
@@ -64,7 +64,7 @@ class Image(models.Model):
         verbose_name_plural = 'Images'
 
     def __str__(self):
-        return self.name
+        return str(self.image)
 
     # def image_tag(self):
     #     if self.file:

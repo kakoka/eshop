@@ -147,5 +147,5 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-MEDIA_ROOT = '/img/'
-MEDIA_URL = 'img/'
+MEDIA_ROOT = '/Users/pasha.BRE/work/webprojects/static/img/upload'
+MEDIA_URL = '/img/'
