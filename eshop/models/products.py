@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
-
+import os
 from django.db import models
 from django.db.models import Manager
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+
+from django.conf import settings
+from django.utils.safestring import mark_safe
 
 from model_utils.models import StatusModel
 from model_utils import Choices
@@ -43,7 +46,8 @@ class ImageManager(Manager):
 class Image(models.Model):
 
     name = models.SlugField()
-    image = models.ImageField(upload_to='img/upload', blank=True, null=True)
+    image = models.ImageField(upload_to=settings.MEDIA_ROOT, blank=True, null=True)
+    externalURL = models.URLField(blank=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -73,6 +77,15 @@ class Image(models.Model):
         if not self.id and not self.image:
             return
         super(Image, self).save()
+    def url(self):
+        if self.externalURL:
+            return self.externalURL
+        else:
+            return os.path.join('/', settings.MEDIA_URL, os.path.basename(str(self.image)))
+    def image_tag(self):
+        return mark_safe('<img src="{}" width="150" height="150" />'.format(self.url()))
+
+    image_tag.short_description = 'Image'
 
 class SupplierManager(Manager):
     def get_queryset(self, **kwargs):
@@ -108,7 +121,6 @@ class ProductManager(Manager):
     def get_queryset(self, **kwargs):
         return super(ProductManager, self).get_queryset().all()
 
-
 class Product(models.Model):
 
     supplier = models.ManyToManyField('Suppliers', related_name='suppliers_name', blank=False)
@@ -119,15 +131,19 @@ class Product(models.Model):
     buy_price = models.DecimalField(max_digits=9, decimal_places=2)
     sell_price = models.DecimalField(max_digits=9, decimal_places=2)
     quantity = models.PositiveSmallIntegerField(default=0)
-    is_instock = models.BooleanField(default=True)
+
+    is_InStock = models.BooleanField(default=True)
+    is_OnMainPage = models.BooleanField(default=False)
+    is_NewProduct = models.BooleanField(default=False)
+
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
     objects = Manager()
     product_manager = ProductManager()
 
-    # class Meta:
-    #     ordering = ('name',)
+    class Meta:
+        ordering = ('name',)
 
     # def save(self, **kwargs):
     #     if not self.pk:

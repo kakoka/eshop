@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
 
 # all needed urls for e-shop
@@ -29,6 +30,11 @@ urlpatterns = [
     url(r'^products/', include('eshop.urls.site')),
 
     # url(r'^show/', show, name='show'),
+    # url(r'^img/(?P<path>.*)$', 'django.views.static.serve', {
+    #     'document_root': settings.MEDIA_ROOT}),
+    # static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+
+
 
     # suppliers
     # url(r'^suppliers/', include('eshop.urls.suppliers')),
@@ -41,5 +47,12 @@ if settings.DEBUG:
     import debug_toolbar
     urlpatterns += [
         url(r'^__debug__/', include(debug_toolbar.urls)),
+        # url(r'^' + settings.MEDIA_ROOT + '(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
         # url(r'^api/', include('rest_framework.urls', namespace='rest_framework'))
     ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+#     urlpatterns += url(r'^img/(?P<path>.*)$',  {'document_root': settings.MEDIA_ROOT})
+
+#     urlpatterns.append(url(r'^img/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}))

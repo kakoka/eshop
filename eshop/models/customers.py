@@ -30,6 +30,8 @@ class Customers(models.Model):
     class Meta:
         verbose_name = 'Customers'
         verbose_name_plural = 'Customers'
+    def __str__(self):
+        return self.firstname
 
 # Таблица "Адрес доставки"
 class Address(models.Model):
@@ -55,6 +57,8 @@ class Shipments(models.Model):
     class Meta:
         verbose_name = 'Shipments'
         verbose_name_plural = 'Shipments'
+    def __str__(self):
+        return self.method
 
 
 # таблица "Метод оплаты"
@@ -64,3 +68,6 @@ class Payments(models.Model):
     class Meta:
         verbose_name = 'Paymets'
         verbose_name_plural = 'Payments'
+
+    def __str__(self):
+        return self.payment

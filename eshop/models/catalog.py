@@ -12,6 +12,9 @@ from eshop.models.products import Product
 
 class Catalog(models.Model):
     item = models.ForeignKey('Product')
+    is_OnMainPage = models.BooleanField(default=False)
+    is_NewProduct = models.BooleanField(default=False)
+
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 

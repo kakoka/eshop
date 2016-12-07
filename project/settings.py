@@ -147,3 +147,5 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+MEDIA_ROOT = '/img/'
+MEDIA_URL = 'img/'

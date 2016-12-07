@@ -45,6 +45,9 @@ class AdminProduct(admin.ModelAdmin):
     list_display = (
         'name',
         'description',
+        'is_InStock',
+        'is_OnMainPage',
+        'is_NewProduct',
         # 'get_image',
         'get_category',
         'get_supplier',
@@ -70,12 +73,9 @@ class AdminProduct(admin.ModelAdmin):
         return format_html('<img src="{}" />'.format(obj.image.url))
 
 class AdminImage(admin.ModelAdmin):
+    fields = ('image_tag', 'name', 'image', 'externalURL',)
+    readonly_fields = ('image_tag',)
 
-    list_display = (
-        'name',
-        'image',
-        'content_type',
-    )
 class AdminSupplier(admin.ModelAdmin):
     list_display = (
         'firstname',
