@@ -1,0 +1,157 @@
+{% load static %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<link>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Christmas again!</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+
+
+    <link rel="stylesheet" href="{% static 'jquery-ui/themes/base/jquery-ui.css' %}" type="text/css"></link>
+    <link rel="stylesheet" href="{% static 'css/eshop.css' %}" type="text/css"></link>
+
+    <script type="application/javascript" src="{% static 'js/simplecart.js' %}"></script>
+    <script type="application/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
+    <script type="application/javascript" src="{% static 'jquery-ui/jquery-ui.js' %}"></script>
+    {% block javascript %}{% endblock %}
+</head>
+
+
+
+<body>
+
+{% csrf_token %}
+{% load carton_tags %}
+{% get_cart as cart %}
+
+<div>
+<h1>Shopping Cart</h1>
+    <table border="1">
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    {% for item in cart.items %}
+    <tr>
+        <td>{{ item.product }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.subtotal }}</td>
+    </tr>
+        {% endfor %}
+    </table>
+    Total: {{ cart.total }}
+</div>
+
+<script>
+    simpleCart({
+        checkout: {
+            type: "SendForm" ,
+            url: "/products/cart/add/"
+    },
+        cartColumns: [
+            { attr: "id", label: "id"},
+            { attr: "name" , label: "Наименование" } ,
+            { attr: "price" , label: "Цена", view: 'currency' } ,
+            { view: "decrement" , label: false , text: "-" } ,
+            { attr: "quantity" , label: "Кол-во" } ,
+            { view: "increment" , label: false , text: "+" } ,
+            { attr: "total" , label: "Всего", view: 'currency' } ,
+            { view: "remove" , text: "Удалить" , label: false }
+        ]
+    });
+    simpleCart.currency({
+        code: "RUR" ,
+        name: "Russian rubles" ,
+        symbol: " Руб." ,
+        delimiter: " " ,
+        decimal: "," ,
+        after: true ,
+        accuracy: 2
+    });
+</script>
+
+<div id="templatemo_container">
+
+	<div id="templatemo_top_panel">
+
+        <div id="templatemo_header">
+          <!--Новый-->
+        </div>
+
+        <div id="templatemo_shoppingcart">
+	        <h3>Корзина покупок</h3>
+            <span class="simpleCart_quantity"></span> товара - <span class="simpleCart_total"></span>
+            <div class="simpleCart_items"></div>
+            <div class="simpleCart_total"></div>
+            <a href="javascript:;" class="simpleCart_checkout">Оформить</a>
+        </div>
+
+    </div> <!-- end of top panel -->
+
+    <div id="templatemo_banner">
+    	<div id="templatemo_banner_text">
+            <h1>Снова Новый год!</h1>
+            <h4>Купите шариковых, а то у вас их нет!</h4>
+            <!--<div class="more_button"><a href="#">View  All</a></div>-->
+    	</div>
+    </div> <!-- end of banner -->
+
+    <div id="templatemo_menu">
+        <ul>
+            <li><a href="/"  class="current">Главная</a></li>
+            <li><a href="#">Мой профиль</a></li>
+            <li><a href="#" class="lastmenu">Контакты</a></li>
+        </ul>
+    </div> <!-- end of menu -->
+
+    <div id="templatemo_content">
+
+    	<div id="templatemo_left_panel">
+
+            <div class="templatemo_red_panel">
+	             <h2>Категории товаров</h2>
+                 <div class="templatemo_left_content">
+                    <ul>
+                        {% for category in categories %}
+                        <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+				</div>
+			</div>
+
+            <div class="templatemo_red_panel_bottom"></div>
+
+            <div class="templatemo_yellow_panel">
+	             <h2>Новое в ассортименте</h2>
+				<div class="templatemo_left_content">
+					<h4>{{ newprod.name }}</h4>
+                    {{ newprod.image_tag }}
+                    <div class="templatemo_price">{{ newprod.sell_price }}</div>
+                    <p>{{ newprod.description }}</p>
+                    <div class="more_button"><a href="#">В корзину</a></div>
+				</div>
+			</div>
+
+            <div class="templatemo_yellow_panel_bottom"></div>
+
+        </div> <!-- end of left panel -->
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+<div id="templatemo_content_bottom"></div>
+
+    <div id="templatemo_footer">
+    <br />Copyright © 2016 <strong>My super mega newbie python project!</strong>
+    </div> <!-- end of footer -->
+<!-- end of container -->
+    </div>
+</div>
+
+</body>
+</html>

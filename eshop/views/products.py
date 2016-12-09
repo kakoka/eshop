@@ -10,7 +10,7 @@ from django.views.generic import FormView
 
 from django.shortcuts import render
 from carton.cart import Cart
-from eshop.models.products import Product, Category
+from eshop.models.products import Product, Category, Image
 from eshop.models.customers import Customers
 from eshop.models.orders import Orders
 from eshop.models.catalog import Catalog
@@ -19,22 +19,16 @@ from eshop.models.catalog import Catalog
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
-@csrf_exempt
+# @csrf_exempt
 # @ajax_request
 def add(request):
-    cart = Cart(request.session)
-    for i in cart.items:
-        name = i.product
-        qwt = i.product.quantity
-        product = Product.objects.get(name=name)
-        cart.add(product, price=product.sell_price, quantity=qwt)
-
-        # print(product)
-    # id = request.POST.get('item_name_1')
-    # product = Product.objects.get(name=request.POST.get('item_name_1'))
-    # print(product, product.pk)
-    # cart.add(product, price=product.sell_price)
-    print(cart)
+    if request.method == 'POST':
+        q = request.POST['product_id']
+        print(q)
+        cart = Cart(request.session)
+        product = Product.objects.get(id=request.POST['product_id'])
+        cart.add(product, product.sell_price)
+        print(cart.items)
     return HttpResponse("Added")
 
 def remove(request):
@@ -43,14 +37,17 @@ def remove(request):
     cart.remove(product)
     return HttpResponse("Removed")
 
-def show(request):
-    return render(request, 'templatemo_045_christmas/index.html')
-
-
-def list_products(request):
+def main_page(request):
     if request.method == "GET":
-        categories = Category.objects.all()
+        mainpage = []
+        categories = Category.objects.exclude(id=1)
+        # print(categories.get_categories) #.objects.get(id=1)
         products = Product.objects.all()
+        for i in products:
+            if i.is_OnMainPage:
+                mainpage.append(i)
+            if i.is_NewProduct:
+                new_prod = i
         cart = {
             "note": 'null',
             "attributes": {},
@@ -62,42 +59,38 @@ def list_products(request):
             "items": [],
             "requires_shipping": 'false',
         }
-        return render(request, 'templatemo_045_christmas/index.html', {'cart': cart, 'products': products, 'categories': categories})
+        return render(request, 'eshop/index.html', {'newprod': new_prod, 'cart': cart, 'products': mainpage, 'categories': categories})
+    return HttpResponse(status=405)
+
+def categories(request, tag):
+    if request.method == 'GET':
+        categories = Category.objects.exclude(id=1)
+
+        cat = Category.objects.filter(tag=tag).values('id')
+
+        product = Product.objects.filter(category=cat)
+        new_prod = Product.objects.get(is_NewProduct=True)
+
+        # if not product:
+        #     raise Http404
+        return render(request, 'eshop/subpage.html', {'newprod': new_prod, 'products': product, 'categories': categories})
     return HttpResponse(status=405)
 
 def cart(request):
     if request.method == "GET":
-        cart = {
-            "note": 'null',
-            "attributes": {},
-            "original_total_price": 0,
-            "total_price": 0,
-            "total_discount": 0,
-            "total_weight": 0,
-            "item_count": 0,
-            "items": [],
-            "requires_shipping": 'false',
-        }
-        return JsonResponse(cart, safe=False)
-    if request.method == "POST":
-        pass
+        cart = Cart(request.session)
+        # cart.cart_serializable
+        return HttpResponse(cart.items_serializable)
 
 def list_customers(request):
     if request.method == "GET":
         categories = Category.objects.all()
         products = Customers.objects.all()
-        return render(request, 'templatemo_045_christmas/index.html', {'products': products, 'categories': categories })
+        return render(request, 'eshop/index.html', {'products': products, 'categories': categories})
         # return render(request, 'eshop/index.html', {'products': products, 'categories': categories })
     return HttpResponse(status=405)
 
-# def list_products(request):
-#     if request.method == 'GET':
-#         product = Product.objects.all()
-#         if not product:
-#             raise Http404
-#
-#         return render(request, 'eshop/list_products.html', {'product': product})
-#     return HttpResponse(status=405)
+
 
 class Registration(FormView):
     template_name = 'eshop/register.html'

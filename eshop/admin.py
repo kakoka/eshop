@@ -25,6 +25,7 @@ class AdminAddress(admin.ModelAdmin):
 class AdminCategory(admin.ModelAdmin):
     list_display = (
         'name',
+        'tag',
         'un_cat',
     )
     # list_editable = (
@@ -48,7 +49,7 @@ class AdminProduct(admin.ModelAdmin):
         'is_InStock',
         'is_OnMainPage',
         'is_NewProduct',
-        # 'get_image',
+        'get_image',
         'get_category',
         'get_supplier',
     )
@@ -61,20 +62,22 @@ class AdminProduct(admin.ModelAdmin):
     # foreign key
     def get_category(self, obj):
         return obj.category.name
-    # image get
-    # def get_image(self, obj):
-    #     return '<img src="%s">' % obj.image.first().url
-    # get_image.allow_tags = True
 
     def get_image(self, obj):
-        # return '\n'.join([d.name for d in obj.image.all()])
-        #
-        # return obj.image.id
-        return format_html('<img src="{}" />'.format(obj.image.url))
+        image = Image.objects.get(object_id=obj.pk) #.values('id')
+        return image.image_tag()
+
+    get_image.allow_tags = True
 
 class AdminImage(admin.ModelAdmin):
-    fields = ('image_tag', 'image', 'externalURL',)
-    readonly_fields = ('image_tag',)
+    list_display = (
+        'image_tag',
+        'get_product_name',
+    )
+
+    def get_product_name(self, obj):
+        product = Product.objects.get(id=obj.object_id)
+        return product.name
 
 class AdminSupplier(admin.ModelAdmin):
     list_display = (

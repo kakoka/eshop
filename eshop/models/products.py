@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import os
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.db.models import Manager
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -24,6 +25,7 @@ class CategoryManager(Manager):
 class Category(models.Model):
     un_category = models.ForeignKey('Category', related_name="under_category", null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, unique=True)
+    tag = models.SlugField()
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
@@ -38,6 +40,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('categories', args=[str(self.tag)])
+
+    @property
+    def get_categories(self):
+        list_cat = []
+        list_cat.append(self.objects.exclude(id=1))
+        return list_cat
+
 # "Изображения товаров"
 class ImageManager(Manager):
     def get_queryset(self, **kwargs):
@@ -47,7 +58,7 @@ class Image(models.Model):
 
     # name = models.SlugField()
     image = models.ImageField(upload_to=settings.MEDIA_ROOT, blank=True, null=True)
-    externalURL = models.URLField(blank=True)
+    # externalURL = models.URLField(blank=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -67,8 +78,8 @@ class Image(models.Model):
         return str(self.image)
 
     # def image_tag(self):
-    #     if self.file:
-    #         return u'<img src="%s" />' % self.file.url
+    #     if self.image:
+    #         return u'<img src="%s" />' % self.image
     #     else:
     #         return '(none)'
 
@@ -77,15 +88,15 @@ class Image(models.Model):
         if not self.id and not self.image:
             return
         super(Image, self).save()
-    def url(self):
-        if self.externalURL:
-            return self.externalURL
-        else:
-            return os.path.join('/', settings.MEDIA_URL, os.path.basename(str(self.image)))
-    def image_tag(self):
-        return mark_safe('<img src="{}" width="150" height="150" />'.format(self.url()))
 
-    image_tag.short_description = 'Image'
+    def url(self):
+
+        return os.path.join('/', settings.MEDIA_URL, os.path.basename(str(self.image)))
+
+    def image_tag(self):
+        return mark_safe('<img src="{}" width="110" height="110" />'.format(self.url()))
+
+    image_tag.short_description = 'tag'
 
 class SupplierManager(Manager):
     def get_queryset(self, **kwargs):
@@ -145,12 +156,18 @@ class Product(models.Model):
     class Meta:
         ordering = ('name',)
 
+    @property
+    def image_tag(self):
+        obj = Image.objects.get(object_id=self.pk)
+        return obj.image_tag()
+
     # def save(self, **kwargs):
     #     if not self.pk:
     #         print('Creating new product')
     #     else:
     #         print('Updating the existing one')
     #     super(Product, self).save(**kwargs)
+
 
     def __str__(self):
         return self.name
