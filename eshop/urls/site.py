@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^reg/', Registration.as_view(), name='register'),
     url(r'^category/([a-zA-Z0-9_-]+)/$', categories, name='categories'),
     # view/<int:pizza_order_id>
-    url(r'^cart/', cart, name='cart'),
+    url(r'^cart/$', cart, name='cart'),
     url(r'^cart/add/', add, name='add'),
     url(r'^cart/remove/$', remove, name='remove'),
     # url(r'^cart/show/$', show, name='show'),
