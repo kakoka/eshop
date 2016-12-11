@@ -17,6 +17,7 @@ from eshop.models.catalog import Catalog
 # from django.utils import simplejson
 # from jsonify.decorators import ajax_request
 from django.views.decorators.csrf import csrf_exempt
+import copy
 # Create your views here.
 
 
@@ -38,7 +39,7 @@ def cart_remove(request):
         print(q)
         cart = Cart(request.session)
         product = Product.objects.get(id=request.POST['product_id'])
-        cart.remove_single(product)
+        cart.remove(product)
         return HttpResponse(cart.cart_serializable)
 
 # @csrf_exempt
@@ -58,12 +59,47 @@ def cart_empty(request):
 def checkout(request):
     if request.method == 'GET':
         cart = Cart(request.session)
+
         return render(request, 'eshop/cart.html', {'cart': cart})
 
     if request.method == 'POST':
-        q = request.body
-        print(q)
         cart = Cart(request.session)
+        q = request.POST
+        d = dict(q._iterlists())
+        w = d.get('itemCount')
+        print(w[0])
+        for i in range(int(w[0])):
+            r = i + 1
+            # print(r)
+            p1 = 'item_options_' + str(r)
+            p2 = 'item_quantity_' + str(r)
+
+            qq = (d.get(p1))
+
+            #product_id zz[2] - is primary key
+
+            pk = qq[0]
+            zz = pk.partition(': ')
+
+            #product quantity - qw
+
+            qw = (d.get(p2)[0])
+            print('pk - ', zz[2], ', qw - ', qw)
+
+            id = int(zz[2])
+            qw = int(qw)
+            product = Product.objects.get(id=id)
+            cart.add(product, product.sell_price, quantity=qw)
+            #     # if
+        #     print(i)
+
+        # z = copy.deepcopy(d)
+        # for i in d.items():
+            # if i[0] in 'item_name':
+            # print(i.values)
+        # p = dict(zip(d.GET.keys()))
+        # print(z)
+        # cart = Cart(request.session)
         return render(request, 'eshop/cart.html', {'cart': cart})
 
 def main_page(request):
@@ -75,20 +111,9 @@ def main_page(request):
         for i in products:
             if i.is_OnMainPage:
                 mainpage.append(i)
-            if i.is_NewProduct:
-                new_prod = i
-        cart = {
-            "note": 'null',
-            "attributes": {},
-            "original_total_price": 0,
-            "total_price": 0,
-            "total_discount": 0,
-            "total_weight": 0,
-            "item_count": 0,
-            "items": [],
-            "requires_shipping": 'false',
-        }
-        return render(request, 'eshop/index.html', {'newprod': new_prod, 'cart': cart, 'products': mainpage, 'categories': categories})
+            # if i.is_NewProduct:
+            #     new_prod = i
+        return render(request, 'eshop/index.html', {'products': mainpage, 'categories': categories})
     return HttpResponse(status=405)
 
 def categories(request, tag):
@@ -98,11 +123,11 @@ def categories(request, tag):
         cat = Category.objects.filter(tag=tag).values('id')
 
         product = Product.objects.filter(category=cat)
-        new_prod = Product.objects.get(is_NewProduct=True)
+        # new_prod = Product.objects.get(is_NewProduct=True)
 
         # if not product:
         #     raise Http404
-        return render(request, 'eshop/subpage.html', {'newprod': new_prod, 'products': product, 'categories': categories})
+        return render(request, 'eshop/subpage.html', {'products': product, 'categories': categories})
     return HttpResponse(status=405)
 
 

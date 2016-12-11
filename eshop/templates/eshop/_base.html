@@ -15,35 +15,23 @@
     <script type="application/javascript" src="{% static 'js/simplecart.js' %}"></script>
     <script type="application/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script type="application/javascript" src="{% static 'jquery-ui/jquery-ui.js' %}"></script>
-    {% block javascript %}{% endblock %}
-</head>
-
-
-
-<body>
-
-{% csrf_token %}
 
 <script>
     simpleCart({
         checkout: {
             type: "SendForm" ,
-            url: "checkout/"
+            url: "{% url "checkout" %}"
     },
         cartColumns: [
-//            { attr: "id"},
-            // { attr: "pk"}, // , label: "pk"},
             { attr: "name" }, //, label: "Наименование" } ,
             { attr: "price" }, // , label: "Цена", view: 'currency' } ,
-            // { view: "decrement" , label: false , text: "-" } ,
-            // { attr: "quantity" , label: "Кол-во" } ,
-            // { view: "increment" , label: false , text: "+" } ,
+            { view: "decrement" , label: false , text: "-" } ,
+            { attr: "quantity" , label: "Qty" } ,
+            { view: "increment" , label: false , text: "+" } ,
             { attr: "total" , label: "Всего", view: 'currency' } ,
             { view: "remove" , text: "Удалить" , label: false }
         ]
     });
-
-    // simpleCart.extend({});
 
     simpleCart.currency({
         code: "RUR" ,
@@ -57,56 +45,11 @@
 
     // add item to cart
 
-    simpleCart.bind( "afterAdd" , function( item ) {
-    var product_id = item.get("pk");
-    $.ajax({
-        url: 'cart/add/',
-        data: {product_id: product_id}, // передаваемые параметры в обработчик
-        type: 'POST', // или GET - метод передачи данных
-        headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value},
-        dataType: 'json', // тип данных в ожидаемом ответе
-        success: function (results) {
-            var cart = JSON.parse(results);
-            console.log(cart);
-            }
-            });
-        });
-
-    // remove item from cart
-    simpleCart.bind( "beforeRemove" , function( item ) {
-    var product_id = item.get("pk");
-    $.ajax({
-        url: 'cart/remove/',
-        data: {product_id: product_id},//{product_id: product_id}, // передаваемые параметры в обработчик
-        type: 'POST', // или GET - метод передачи данных
-        headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value},
-        dataType: 'json', // тип данных в ожидаемом ответе
-        success: function () {
-            console.log("Removed from cart!");
-            }
-            });
-        });
-
-
-    simpleCart.bind( "beforeCheckout" , function() {
-        $('#dialog').dialog({
-modal:true,
-  buttons:{
-    Ok: function(){
-      $(this).dialog( "close" );
-    }
-  }
-        });
-        $.get( "cart/", function( data ) {
-            $( ".result" ).html( data );
-            $('#dialog').dialog('open').html(data);
-            });
-
-        });
-
-
-
 </script>
+</head>
+
+<body>
+{% csrf_token %}
 
 <div id="templatemo_container">
 
@@ -122,6 +65,7 @@ modal:true,
             <div class="simpleCart_items"></div>
             <div class="simpleCart_total"></div>
             <a href="javascript:;" class="simpleCart_checkout">Оформить</a>
+            <a href="javascript:;" class="simpleCart_empty">Очистить</a>
         </div>
 
     </div> <!-- end of top panel -->
@@ -156,23 +100,24 @@ modal:true,
                     </ul>
 				</div>
 			</div>
+             <div class="templatemo_red_panel_bottom"></div>
 
-            <div class="templatemo_red_panel_bottom"></div>
-
-            <div class="templatemo_yellow_panel">
-	             <h2>Новое в ассортименте</h2>
-				<div class="templatemo_left_content">
-					<h4>{{ newprod.name }}</h4>
-                    {{ newprod.image_tag }}
-                    <div class="templatemo_price">{{ newprod.sell_price }}</div>
-                    <p>{{ newprod.description }}</p>
-                    <div class="more_button"><a href="#">В корзину</a></div>
-				</div>
-			</div>
-
-            <div class="templatemo_yellow_panel_bottom"></div>
+{% block yellowpanel %}
+{% endblock %}
 
         </div> <!-- end of left panel -->
+<div id="templatemo_right_panel">
+<div id="dialog" title="Ваша корзина"></div>
+</div>
+
+<div id="templatemo_right_panel">
+    <div class="templatemo_right_panel_fullwidth">
+        <h1>Добро пожаловать!</h1>
+        <img src="/static/images/image(200x120).gif" alt="image" />
+        <p>В нашем новогоднем интернет магазине мы хотим предоставить покупателям то, что хотели бы получать сами: легкость и простоту в нахождении товара, реальные цены, гибкая система скидок, оперативное обслуживание и замечательный товар отечественного производства.</p>
+        <p>Наш интернет магазин торгует оптом и в розницу, а весной приглашаем всех оптовиков на совместную закупку у производителей. Ежегодно в сентябре у нас проводится предсезонная распродажа.</p>
+        <p>Осуществляется курьерская доставка заказов по Москве, МО, Питеру, Нижнему Новгороду. В Москве пятнадцать пунктов выдачи заказов, возможен самовывоз со склада в г. Мытищи и в Медведково. Заказы в регионы доставляются почтой России и транспортными компаниями.</p>
+    </div>
 
 {% block content %}
 {% endblock %}

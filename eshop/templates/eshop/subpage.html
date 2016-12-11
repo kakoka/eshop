@@ -1,24 +1,26 @@
 {% extends "eshop/_base.html" %}
+
 {% block content %}
-{% load carton_tags %}
-
-<div class="productrow">
-
     {% for product in products %}
 
+    <div class="productrow">
      <div class="productbox simpleCart_shelfItem">
         <div class="left">{{ product.image_tag }}</div>
             <div class="right">
             <h3 class="item_name">{{ product.name }}</h3>
-                <div class="templatemo_price"><span class="item_price">{{ product.sell_price}} руб.</span></div>
-                <!-- <button data-cart-add="1">Add Product</button> -->
-                <!-- <input type="text" class="input_withd" size="3" value="1" class="item_Quantity"> -->
-                <div class="addtocard_btn"><a class="item_add" href="javascript:;">В корзину</a></div>
-                <!--<div class="more_button"><a href="subpage.html">Detail</a></div>-->
+                <div class="templatemo_price">
+                    <span class="item_price">{{ product.sell_price}} руб.</span>
+                    <span class="item_pk">{{ product.id }}</span>
+                    </div>
+                    <div class="addtocard_btn">
+                        <a class="item_add" id="addtocart" rel="{{ product.id }}" href="javascript:;">В корзину</a>
+                    </div>
             </div>
     </div>
+        </div>
 
     {% endfor %}
+
 
 </div>
 

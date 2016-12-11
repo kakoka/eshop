@@ -1,46 +1,62 @@
 {% extends "eshop/_base.html" %}
-{% block javascript %}
+{% load filters %}
 
-{% endblock %}
+
 
 {% block content %}
-<div id="templatemo_right_panel">
 
-<div id="dialog" title="Ваша корзина"></div>
-</div>
-
-<div id="templatemo_right_panel">
     <div class="templatemo_right_panel_fullwidth">
-        <h1>Добро пожаловать!</h1>
-        <img src="/static/images/image(200x120).gif" alt="image" />
-        <p>В нашем новогоднем интернет магазине мы хотим предоставить покупателям то, что хотели бы получать сами: легкость и простоту в нахождении товара, реальные цены, гибкая система скидок, оперативное обслуживание и замечательный товар отечественного производства.</p>
-        <p>Наш интернет магазин торгует оптом и в розницу, а весной приглашаем всех оптовиков на совместную закупку у производителей. Ежегодно в сентябре у нас проводится предсезонная распродажа.</p>
-        <p>Осуществляется курьерская доставка заказов по Москве, МО, Питеру, Нижнему Новгороду. В Москве пятнадцать пунктов выдачи заказов, возможен самовывоз со склада в г. Мытищи и в Медведково. Заказы в регионы доставляются почтой России и транспортными компаниями.</p>
-    </div>
-    <div class="templatemo_right_panel_fullwidth">
-        <div class="productrow">
 
-        {% for product in products %}
+{#        {% for i in 2|times %}#}
 
-            <div class="productbox simpleCart_shelfItem">
-                <div class="left">{{ product.image_tag }}</div>
-                <div class="right">
-                    <h3 class="item_name">{{ product.name }}</h3>
-                    <div class="templatemo_price">
-                    <span class="item_price">{{ product.sell_price}} руб.</span>
-                    <span class="item_pk">{{ product.id }}</span>
-                    </div>
-                    <div class="addtocard_btn">
-                        <a class="item_add" id="addtocart" rel="{{ product.id }}" href="javascript:;">В корзину</a>
+    {% for product in products %}
+        {% if product.is_OnMainPage and product.is_NewProduct == False %}
+            <div class="productrow">
+                <div class="productbox simpleCart_shelfItem">
+                    <div class="left">{{ product.image_tag }}</div>
+                    <div class="right">
+                        <h3 class="item_name">{{ product.name }}</h3>
+                        <div class="templatemo_price">
+                            <span class="item_price">{{ product.sell_price}} руб.</span>
+                            <span class="item_pk">{{ product.id }}</span>
+                        </div>
+                        <div class="addtocard_btn">
+                            <a class="item_add" id="addtocart" rel="{{ product.id }}" href="javascript:;">В корзину</a>
+                        </div>
                     </div>
                 </div>
             </div>
+    {% endif %}
+    {% endfor %}
 
-        {% endfor %}
 
-        </div>
+{#    {% endfor %}#}
+
     </div>
 </div>
  <!-- end of content -->
+{% endblock %}
+
+{% block yellowpanel %}
+
+    {% for product in products %}
+    {% if product.is_NewProduct %}
+        <div class="templatemo_yellow_panel">
+            <h2>Новое в ассортименте</h2>
+            <div class="templatemo_left_content simpleCart_shelfItem">
+                <h4>{{ product.name }}</h4>
+                {{ product.image_tag }}
+                <div class="templatemo_price">
+                    <span class="item_price">{{ product.sell_price}} руб.</span>
+                    <span class="item_pk">{{ product.id }}</span>
+                </div>
+                <div class="addtocard_btn">
+                    <a class="item_add" id="addtocart" rel="{{ product.id }}" href="javascript:;">В корзину</a>
+                </div>
+            </div>
+        </div>
+        <div class="templatemo_yellow_panel_bottom"></div>
+     {% endif %}
+    {% endfor %}
 
 {% endblock %}
