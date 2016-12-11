@@ -592,7 +592,7 @@
 				},
 
 				remove: function (item, column) {
-					return "<a href='javascript:;' class='" + namespace + "_remove'>" + (column.text || "X") + "</a>";
+					return "<a href='javascript:;' class='" + namespace + "_remove' id='rem'>" + (column.text || "X") + "</a>";
 				}
 			};
 

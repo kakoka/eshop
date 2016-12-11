@@ -1,47 +1,12 @@
 {% extends "eshop/_base.html" %}
 {% block javascript %}
-<script type="text/javascript">
 
-{#   var ajaxResponse = '<a href="http://site.ru/?param=1">Link 1</a><br /><a href="http://site.ru/?param=2">Link 2</a><br /><a href="http://site.ru/?param=3">Link 3</a>';#}
-
-$(function () {
-    $('#dialog').dialog({
-        autoOpen: false,
-        show: 'blind',
-        hide: 'explode'
-    });
-
-    $(".item_add").click(function () {
-        var product_id = $(this).attr('rel');
-        alert('Будем параметр: ' + product_id);
-
-        $.ajax({
-            url: 'cart/add/',
-            data: {product_id: product_id}, // передаваемые параметры в обработчик
-            type: 'POST', // или GET - метод передачи данных
-            headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value},
-            dataType: 'json', // тип данных в ожидаемом ответе
-            success: function(data){
-                // на самом деле, в data находится именно ваш ожидаемы ответ
-                // от обработчика, но т.к. мы тут реальный ответ
-                // использовать не можем, то используем ответ
-                // созданный вручную - переменная ajaxResponse
-                $('#dialog').dialog('open').html(responseType(XMLHttpRequest));
-            }
-        });
-    });
-});
-
-
-</script>
 {% endblock %}
 
 {% block content %}
 <div id="templatemo_right_panel">
 
-{#<a id="opener" href="javascript:;" rel="on">Кликни меня!</a>#}
-<div id="dialog" title="Basic dialog"></div>
-
+<div id="dialog" title="Ваша корзина"></div>
 </div>
 
 <div id="templatemo_right_panel">
@@ -63,6 +28,7 @@ $(function () {
                     <h3 class="item_name">{{ product.name }}</h3>
                     <div class="templatemo_price">
                     <span class="item_price">{{ product.sell_price}} руб.</span>
+                    <span class="item_pk">{{ product.id }}</span>
                     </div>
                     <div class="addtocard_btn">
                         <a class="item_add" id="addtocart" rel="{{ product.id }}" href="javascript:;">В корзину</a>

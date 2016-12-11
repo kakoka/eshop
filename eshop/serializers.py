@@ -1,17 +1,15 @@
 from django.contrib.auth.models import User, Group, Permission
 from eshop.models.products import Product, Image, Category, Suppliers
+
+from carton.cart import Cart
 from rest_framework import serializers
 
-class ProductListSerializer(serializers.ModelSerializer):
-    image = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='product_photo'
-    )
+class CartSerializer(serializers.ModelSerializer):
+    cart = serializers.ReadOnlyField(source='cart.pk')
 
     class Meta:
-        model = Product
-        fields = ('id', 'image', 'name', 'description')
+        model = Cart
+        fields = ('pk', 'name', 'quantity', )
 
         #  = models.ForeignKey('Category')
         #  = models.ForeignKey('Images', on_delete=models.CASCADE)

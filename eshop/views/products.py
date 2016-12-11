@@ -19,23 +19,52 @@ from eshop.models.catalog import Catalog
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
+
 # @csrf_exempt
 # @ajax_request
-def add(request):
+def cart_add(request):
     if request.method == 'POST':
         q = request.POST['product_id']
         print(q)
         cart = Cart(request.session)
         product = Product.objects.get(id=request.POST['product_id'])
         cart.add(product, product.sell_price)
-        print(cart.items)
-    return HttpResponse("Added")
+        print(cart.cart_serializable)
+        return HttpResponse(cart.cart_serializable)
 
-def remove(request):
-    cart = Cart(request.session)
-    product = Product.objects.get(id=request.POST.get('id'))
-    cart.remove(product)
-    return HttpResponse("Removed")
+def cart_remove(request):
+    if request.method == 'POST':
+        q = request.POST['product_id']
+        print(q)
+        cart = Cart(request.session)
+        product = Product.objects.get(id=request.POST['product_id'])
+        cart.remove_single(product)
+        return HttpResponse(cart.cart_serializable)
+
+# @csrf_exempt
+def cart_show(request):
+    if request.method == "GET":
+        print('get!!!')
+        cart = Cart(request.session)
+        return HttpResponse(cart.items_serializable)
+
+def cart_empty(request):
+    if request.method == 'GET':
+        cart = Cart(request.session)
+        cart.clear()
+        return HttpResponse(cart.cart_serializable)
+
+@csrf_exempt
+def checkout(request):
+    if request.method == 'GET':
+        cart = Cart(request.session)
+        return render(request, 'eshop/cart.html', {'cart': cart})
+
+    if request.method == 'POST':
+        q = request.body
+        print(q)
+        cart = Cart(request.session)
+        return render(request, 'eshop/cart.html', {'cart': cart})
 
 def main_page(request):
     if request.method == "GET":
@@ -76,11 +105,7 @@ def categories(request, tag):
         return render(request, 'eshop/subpage.html', {'newprod': new_prod, 'products': product, 'categories': categories})
     return HttpResponse(status=405)
 
-def cart(request):
-    if request.method == "GET":
-        cart = Cart(request.session)
-        # cart.cart_serializable
-        return HttpResponse(cart.items_serializable)
+
 
 def list_customers(request):
     if request.method == "GET":

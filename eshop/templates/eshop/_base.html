@@ -23,45 +23,28 @@
 <body>
 
 {% csrf_token %}
-{% load carton_tags %}
-{% get_cart as cart %}
-
-<div>
-<h1>Shopping Cart</h1>
-    <table border="1">
-    <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
-    </tr>
-    {% for item in cart.items %}
-    <tr>
-        <td>{{ item.product }}</td>
-        <td>{{ item.quantity }}</td>
-        <td>{{ item.subtotal }}</td>
-    </tr>
-        {% endfor %}
-    </table>
-    Total: {{ cart.total }}
-</div>
 
 <script>
     simpleCart({
         checkout: {
             type: "SendForm" ,
-            url: "/products/cart/add/"
+            url: "checkout/"
     },
         cartColumns: [
-            { attr: "id", label: "id"},
-            { attr: "name" , label: "Наименование" } ,
-            { attr: "price" , label: "Цена", view: 'currency' } ,
-            { view: "decrement" , label: false , text: "-" } ,
-            { attr: "quantity" , label: "Кол-во" } ,
-            { view: "increment" , label: false , text: "+" } ,
+//            { attr: "id"},
+            // { attr: "pk"}, // , label: "pk"},
+            { attr: "name" }, //, label: "Наименование" } ,
+            { attr: "price" }, // , label: "Цена", view: 'currency' } ,
+            // { view: "decrement" , label: false , text: "-" } ,
+            // { attr: "quantity" , label: "Кол-во" } ,
+            // { view: "increment" , label: false , text: "+" } ,
             { attr: "total" , label: "Всего", view: 'currency' } ,
             { view: "remove" , text: "Удалить" , label: false }
         ]
     });
+
+    // simpleCart.extend({});
+
     simpleCart.currency({
         code: "RUR" ,
         name: "Russian rubles" ,
@@ -71,6 +54,58 @@
         after: true ,
         accuracy: 2
     });
+
+    // add item to cart
+
+    simpleCart.bind( "afterAdd" , function( item ) {
+    var product_id = item.get("pk");
+    $.ajax({
+        url: 'cart/add/',
+        data: {product_id: product_id}, // передаваемые параметры в обработчик
+        type: 'POST', // или GET - метод передачи данных
+        headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        dataType: 'json', // тип данных в ожидаемом ответе
+        success: function (results) {
+            var cart = JSON.parse(results);
+            console.log(cart);
+            }
+            });
+        });
+
+    // remove item from cart
+    simpleCart.bind( "beforeRemove" , function( item ) {
+    var product_id = item.get("pk");
+    $.ajax({
+        url: 'cart/remove/',
+        data: {product_id: product_id},//{product_id: product_id}, // передаваемые параметры в обработчик
+        type: 'POST', // или GET - метод передачи данных
+        headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value},
+        dataType: 'json', // тип данных в ожидаемом ответе
+        success: function () {
+            console.log("Removed from cart!");
+            }
+            });
+        });
+
+
+    simpleCart.bind( "beforeCheckout" , function() {
+        $('#dialog').dialog({
+modal:true,
+  buttons:{
+    Ok: function(){
+      $(this).dialog( "close" );
+    }
+  }
+        });
+        $.get( "cart/", function( data ) {
+            $( ".result" ).html( data );
+            $('#dialog').dialog('open').html(data);
+            });
+
+        });
+
+
+
 </script>
 
 <div id="templatemo_container">

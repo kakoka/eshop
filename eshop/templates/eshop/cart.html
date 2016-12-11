@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% csrf_token %}
+{% load carton_tags %}
+{% get_cart as cart %}
+
+<div>
+<h1>Shopping Cart</h1>
+    <table border="1">
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    {% for item in cart.items %}
+    <tr>
+        <td>{{ item.product }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.subtotal }}</td>
+    </tr>
+        {% endfor %}
+    </table>
+    Total: {{ cart.total }}
+</div>
+
+</body>
+</html>

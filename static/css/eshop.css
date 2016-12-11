@@ -121,7 +121,9 @@ img {
 }
 
 #templatemo_shoppingcart {
+	position: absolute;
 	float: right;
+	right: 100px;
 	border: 1px solid #FFFFFF;
 	color: #FFFFFF;
 	margin: 15px 15px 0 0;
