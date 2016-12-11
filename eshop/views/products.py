@@ -64,6 +64,7 @@ def checkout(request):
 
     if request.method == 'POST':
         cart = Cart(request.session)
+        cart.clear()
         q = request.POST
         d = dict(q._iterlists())
         w = d.get('itemCount')

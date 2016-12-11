@@ -26,7 +26,7 @@
             { attr: "name" }, //, label: "Наименование" } ,
             { attr: "price" }, // , label: "Цена", view: 'currency' } ,
             { view: "decrement" , label: false , text: "-" } ,
-            { attr: "quantity" , label: "Qty" } ,
+            { attr: "quantity" , label: "Кол-во" } ,
             { view: "increment" , label: false , text: "+" } ,
             { attr: "total" , label: "Всего", view: 'currency' } ,
             { view: "remove" , text: "Удалить" , label: false }
@@ -60,10 +60,9 @@
         </div>
 
         <div id="templatemo_shoppingcart">
-	        <h3>Корзина покупок</h3>
-            <span class="simpleCart_quantity"></span> товара - <span class="simpleCart_total"></span>
-            <div class="simpleCart_items"></div>
-            <div class="simpleCart_total"></div>
+	        <h3>Корзина покупок</h3><span class="simpleCart_total"></span><br>
+            <span class="simpleCart_items"></span><span class="simpleCart_quantity"></span> товара - <span class="simpleCart_total"></span>
+            <br>
             <a href="javascript:;" class="simpleCart_checkout">Оформить</a>
             <a href="javascript:;" class="simpleCart_empty">Очистить</a>
         </div>
