@@ -9,12 +9,17 @@
 <meta name="description" content="" />
 
 
-    <link rel="stylesheet" href="{% static 'jquery-ui/themes/base/jquery-ui.css' %}" type="text/css"></link>
-    <link rel="stylesheet" href="{% static 'css/eshop.css' %}" type="text/css"></link>
+    <link rel="stylesheet" href="{% static 'jquery-ui/themes/base/jquery-ui.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'css/eshop.css' %}" type="text/css" />
 
-    <script type="application/javascript" src="{% static 'js/simplecart.js' %}"></script>
     <script type="application/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script type="application/javascript" src="{% static 'jquery-ui/jquery-ui.js' %}"></script>
+    <script type="application/javascript" src="{% static 'jquery-validation/dist/jquery.validate.js'%}"></script>
+    <script type="application/javascript" src="{% static 'jquery-validation/dist/additional-methods.js'%}"></script>
+    <script type="application/javascript" src="{% static 'jquery-form-validator/form-validator/jquery.form-validator.js'%}"></script>
+
+    <script type="application/javascript" src="{% static 'js/simplecart.js' %}"></script>
+
 
 <script>
     simpleCart({
@@ -49,6 +54,9 @@
 </head>
 
 <body>
+<script>
+    simpleCart.load()
+</script>
 {% csrf_token %}
 
 <div id="templatemo_container">
@@ -79,7 +87,7 @@
 
     <div id="templatemo_menu">
         <ul>
-            <li><a href="/"  class="current">Главная</a></li>
+            <li><a href="{% url "main_page" %}"  class="current">Главная</a></li>
             <li><a href="#">Мой профиль</a></li>
             <li><a href="#" class="lastmenu">Контакты</a></li>
         </ul>
@@ -89,6 +97,7 @@
 
     	<div id="templatemo_left_panel">
 
+            {% if 'checkout' not in request.path %}
             <div class="templatemo_red_panel">
 	             <h2>Категории товаров</h2>
                  <div class="templatemo_left_content">
@@ -98,8 +107,9 @@
                         {% endfor %}
                     </ul>
 				</div>
-			</div>
+            </div>
              <div class="templatemo_red_panel_bottom"></div>
+            {% endif %}
 
 {% block yellowpanel %}
 {% endblock %}
@@ -109,14 +119,6 @@
 <div id="dialog" title="Ваша корзина"></div>
 </div>
 
-<div id="templatemo_right_panel">
-    <div class="templatemo_right_panel_fullwidth">
-        <h1>Добро пожаловать!</h1>
-        <img src="/static/images/image(200x120).gif" alt="image" />
-        <p>В нашем новогоднем интернет магазине мы хотим предоставить покупателям то, что хотели бы получать сами: легкость и простоту в нахождении товара, реальные цены, гибкая система скидок, оперативное обслуживание и замечательный товар отечественного производства.</p>
-        <p>Наш интернет магазин торгует оптом и в розницу, а весной приглашаем всех оптовиков на совместную закупку у производителей. Ежегодно в сентябре у нас проводится предсезонная распродажа.</p>
-        <p>Осуществляется курьерская доставка заказов по Москве, МО, Питеру, Нижнему Новгороду. В Москве пятнадцать пунктов выдачи заказов, возможен самовывоз со склада в г. Мытищи и в Медведково. Заказы в регионы доставляются почтой России и транспортными компаниями.</p>
-    </div>
 
 {% block content %}
 {% endblock %}

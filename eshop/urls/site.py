@@ -8,6 +8,7 @@ from eshop.views.products import (
     cart_show,
     cart_empty,
     checkout,
+    order,
 )
 
 
@@ -22,8 +23,7 @@ urlpatterns = [
     url(r'^cart/remove/$', cart_remove, name='remove'),
     url(r'^checkout/$', checkout, name='checkout'),
     url(r'^cart/empty/$', cart_empty, name='empty'),
-
-    # url(r'^cart/add(?id[0-9]+)/', cart, name='cart'),
+    url(r'^cart/order/$', order, name='order'),
     # url(r'^close/(?P<pizza_order_id>[0-9]+)/', close, name='close'),
     # url(r'^stats/', stats, name='stats'),
     # url(r'^/(?P<pk>[0-9]+)/$',

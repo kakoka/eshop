@@ -131,7 +131,12 @@ def categories(request, tag):
         return render(request, 'eshop/subpage.html', {'products': product, 'categories': categories})
     return HttpResponse(status=405)
 
-
+def order(request):
+    if request.method == "POST":
+        q = request.POST
+        print(q)
+        return render(request, 'eshop/order.html') #, {'products': product, 'categories': categories})
+        # return HttpResponse('OK!')
 
 def list_customers(request):
     if request.method == "GET":

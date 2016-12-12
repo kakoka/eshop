@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # common url for producs operations
-    url(r'^products/', include('eshop.urls.site')),
+    url(r'^products/', include('eshop.urls.site'), name='main_page'),
 
     # url(r'^show/', show, name='show'),
     # url(r'^img/(?P<path>.*)$', 'django.views.static.serve', {
