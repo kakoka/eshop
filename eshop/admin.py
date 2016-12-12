@@ -61,6 +61,7 @@ class AdminProduct(admin.ModelAdmin):
         return '\n'.join([d.firstname for d in obj.supplier.all()])
     # foreign key
     def get_category(self, obj):
+        # return '\n'.join([d.name for d in obj.category.all()])
         return obj.category.name
 
     def get_image(self, obj):

@@ -9,6 +9,10 @@ from model_utils import Choices
 # class Article(StatusModel):
 #     STATUS = Choices('draft', 'published')
 
+class CustomerManager(Manager):
+    def get_queryset(self, **kwargs):
+        return super(CustomerManager, self).get_queryset().all()
+
 # таблица "Покупатели"
 class Customers(models.Model):
     firstname = models.CharField(max_length=50)
@@ -26,6 +30,10 @@ class Customers(models.Model):
     notes = models.TextField(blank=True, default='')
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
+
+    objects = Manager()
+    customer_manager = CustomerManager()
+
 
     class Meta:
         verbose_name = 'Customers'
@@ -47,6 +55,8 @@ class Address(models.Model):
 
     def __str__(self):
         return self.street
+
+
 
 # Таблица "Метод доставки"
 class Shipments(models.Model):

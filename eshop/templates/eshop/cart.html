@@ -7,7 +7,7 @@
 
 <script>
 {#    simpleCart.save();#}
-    simpleCart.empty();
+{#    simpleCart.empty();#}
 </script>
 
 <script>
@@ -15,10 +15,12 @@
     var dialog, form,
       // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
       emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-      name = $( "#name" ),
+      firstname = $( "#firstname" ),
+      lastname = $( "#lastname" ),
       email = $( "#email" ),
+      phone = $("#phone"),
       address = $( "#address" ),
-      allFields = $( [] ).add( name ).add( email ).add( address ),
+      allFields = $( [] ).add( firstname ).add( lastname ).add( email ).add (phone).add( address ),
       tips = $( ".validateTips" );
 
     function updateTips( t ) {
@@ -55,11 +57,13 @@
       var valid = true;
       allFields.removeClass( "ui-state-error" );
 
-      valid = valid && checkLength( name, "username", 3, 16 );
+      valid = valid && checkLength( firstname, "username", 3, 16 );
+      valid = valid && checkLength( lastname, "username", 3, 16 );
       valid = valid && checkLength( email, "email", 6, 80 );
       valid = valid && checkLength( address, "address", 5, 16 );
 
-      valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
+      valid = valid && checkRegexp( firstname, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
+      valid = valid && checkRegexp( lastname, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
       valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
       valid = valid && checkRegexp( address, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
 
@@ -67,7 +71,7 @@
 
       $.ajax({
         url: '{% url "order" %}',
-        data: {name: name.val(), email: email.val(), address: address.val()}, // передаваемые параметры в обработчик
+        data: {firstname: firstname.val(), lastname: lastname.val(), email: email.val(), address: address.val(), phone: phone.val()}, // передаваемые параметры в обработчик
         type: 'POST', // или GET - метод передачи данных
         headers: {'X-CSRFToken': document.getElementsByName('csrfmiddlewaretoken')[0].value},
         dataType: 'html', // тип данных в ожидаемом ответе
@@ -144,14 +148,22 @@
   <p class="validateTips">Все поля формы должны быть заполнены.</p>
   <form>
     <fieldset>
-      <label for="name">Имя, фамилия</label>
-      <input type="text" name="name" id="name" value="Имя Фамилия" class="text ui-widget-content ui-corner-all">
-      <label for="email" >Email</label>
+      <label for="fristname">Имя</label>
+      <input type="text" name="fristname" id="firstname" value="Name" class="text ui-widget-content ui-corner-all">
+      <label for="lastname">Фамилия</label>
+      <input type="text" name="lastname" id="lastname" value="Secondname" class="text ui-widget-content ui-corner-all">
+        <label for="email" >Email</label>
       <input type="text" name="email" id="email" value="my_email@e-mail.com" class="text ui-widget-content ui-corner-all" data-validation="email">
-      <label for="Address">Адрес доставки</label>
+
+        <label for="phone" >Email</label>
+      <input type="text" name="phone" id="phone" value="+7-123-123-45-67" class="text ui-widget-content ui-corner-all" data-validation="email">
+
+
+        <label for="Address">Адрес доставки</label>
       <input type="address" name="address" id="address" value="address" class="text ui-widget-content ui-corner-all">
       <!-- Allow form submission with keyboard without duplicating the dialog button -->
-      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
     </fieldset>
   </form>
 </div>

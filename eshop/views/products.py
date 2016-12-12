@@ -11,7 +11,7 @@ from django.views.generic import FormView
 from django.shortcuts import render
 from carton.cart import Cart
 from eshop.models.products import Product, Category, Image
-from eshop.models.customers import Customers
+from eshop.models.customers import Customers, Address, Shipments, Payments
 from eshop.models.orders import Orders
 from eshop.models.catalog import Catalog
 # from django.utils import simplejson
@@ -65,42 +65,38 @@ def checkout(request):
     if request.method == 'POST':
         cart = Cart(request.session)
         cart.clear()
-        q = request.POST
-        d = dict(q._iterlists())
-        w = d.get('itemCount')
-        print(w[0])
-        for i in range(int(w[0])):
+        params = request.POST
+        params_dict = dict(params._iterlists())
+
+        # get items list, items count and quantity from cart
+
+        items_count = params_dict.get('itemCount')
+
+        # lets get params for order from POST request
+        for i in range(int(items_count[0])):
             r = i + 1
-            # print(r)
-            p1 = 'item_options_' + str(r)
-            p2 = 'item_quantity_' + str(r)
+            prod_options = 'item_options_' + str(r)
+            prod_quantity = 'item_quantity_' + str(r)
 
-            qq = (d.get(p1))
+            prod_options_list = (params_dict.get(prod_options))
 
-            #product_id zz[2] - is primary key
+            key_from_list = prod_options_list[0]
+            keys_extracted = key_from_list.partition(': ')
 
-            pk = qq[0]
-            zz = pk.partition(': ')
+            # product id - keys_extracted
+            # product quantity - quantity_extracted
 
-            #product quantity - qw
+            quantity_extracted = (params_dict.get(prod_quantity)[0])
 
-            qw = (d.get(p2)[0])
-            print('pk - ', zz[2], ', qw - ', qw)
+            # log option
+            # print('product id - ', keys_extracted[2], ', quantity - ', quantity_extracted)
 
-            id = int(zz[2])
-            qw = int(qw)
+            id = int(keys_extracted[2])
+            quantity_extracted = int(quantity_extracted)
+
+            # get producs from products table, add them to cart
             product = Product.objects.get(id=id)
-            cart.add(product, product.sell_price, quantity=qw)
-            #     # if
-        #     print(i)
-
-        # z = copy.deepcopy(d)
-        # for i in d.items():
-            # if i[0] in 'item_name':
-            # print(i.values)
-        # p = dict(zip(d.GET.keys()))
-        # print(z)
-        # cart = Cart(request.session)
+            cart.add(product, product.sell_price, quantity=quantity_extracted)
         return render(request, 'eshop/cart.html', {'cart': cart})
 
 def main_page(request):
@@ -133,8 +129,51 @@ def categories(request, tag):
 
 def order(request):
     if request.method == "POST":
-        q = request.POST
-        print(q)
+        cart = Cart(request.session)
+
+        customer_firstname = request.POST['firstname']
+        customer_lastname = request.POST['lastname']
+        customr_email = request.POST['email']
+        customer_phone = request.POST['phone']
+        customer_address = request.POST['address']
+
+        # get data from cart,  create customer
+        # for i in cart.items_serializable:
+        #     item_pk = i[0]
+        #     item_qw = i[1]
+            # print(
+            #     'product_id: ', item_pk,
+            #     'quantity: ', item_qw.get('quantity')
+            # )
+            # print(
+            #     customer_firstname,
+            #     customer_lastname,
+            #     customr_email,
+            #     customer_phone,
+            #     customer_address
+            # )
+
+        address = Address(street=customer_address, building='12', appartment='12')
+        address.save()
+
+        customer_shipment = 1
+        shipment = Shipments.objects.get(id=customer_shipment)
+
+        customer_payment = 1
+        payment = Payments.objects.get(id=customer_payment)
+
+        print(payment.payment, shipment.method)
+
+        customer = Customers(firstname=customer_firstname, lastname=customer_lastname,
+                     password='123', phone=customer_phone, birthdate='1975-10-10',
+                     address=address, shipment=shipment, payment=payment, customers=1)
+
+        print(customer.address)
+        customer.save()
+
+        # create order
+
+        # print(customer_firstname, customer_lastname, customr_email, customer_phone, customer_address)
         return render(request, 'eshop/order.html') #, {'products': product, 'categories': categories})
         # return HttpResponse('OK!')
 

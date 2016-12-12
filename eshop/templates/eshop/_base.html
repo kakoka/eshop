@@ -14,9 +14,10 @@
 
     <script type="application/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
     <script type="application/javascript" src="{% static 'jquery-ui/jquery-ui.js' %}"></script>
-    <script type="application/javascript" src="{% static 'jquery-validation/dist/jquery.validate.js'%}"></script>
-    <script type="application/javascript" src="{% static 'jquery-validation/dist/additional-methods.js'%}"></script>
-    <script type="application/javascript" src="{% static 'jquery-form-validator/form-validator/jquery.form-validator.js'%}"></script>
+
+{#    <script type="application/javascript" src="{% static 'jquery-validation/dist/jquery.validate.js'%}"></script>#}
+{#    <script type="application/javascript" src="{% static 'jquery-validation/dist/additional-methods.js'%}"></script>#}
+{#    <script type="application/javascript" src="{% static 'jquery-form-validator/form-validator/jquery.form-validator.js'%}"></script>#}
 
     <script type="application/javascript" src="{% static 'js/simplecart.js' %}"></script>
 
@@ -54,9 +55,7 @@
 </head>
 
 <body>
-<script>
-    simpleCart.load()
-</script>
+
 {% csrf_token %}
 
 <div id="templatemo_container">
@@ -66,7 +65,7 @@
         <div id="templatemo_header">
           <!--Новый-->
         </div>
-
+        {% if 'checkout' not in request.path %}
         <div id="templatemo_shoppingcart">
 	        <h3>Корзина покупок</h3><span class="simpleCart_total"></span><br>
             <span class="simpleCart_items"></span><span class="simpleCart_quantity"></span> товара - <span class="simpleCart_total"></span>
@@ -74,7 +73,7 @@
             <a href="javascript:;" class="simpleCart_checkout">Оформить</a>
             <a href="javascript:;" class="simpleCart_empty">Очистить</a>
         </div>
-
+        {% endif %}
     </div> <!-- end of top panel -->
 
     <div id="templatemo_banner">

@@ -14,6 +14,7 @@ from eshop.models.customers import Customers, Shipments, Payments
 from eshop.models.catalog import Catalog
 
 # Таблица "Заказы"
+
 class Orders(models.Model):
     # catalog = models.ManyToManyField('Catalog', related_name="order_catalog", null=False)
     customer = models.ForeignKey('Customers')
