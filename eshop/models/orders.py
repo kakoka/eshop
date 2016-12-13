@@ -41,5 +41,8 @@ class OrderStatus(models.Model):
         verbose_name = 'Order status'
         verbose_name_plural = 'Order status'
 
+    def __str__(self):
+        return str(self.status)
+
 
 

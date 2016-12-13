@@ -41,6 +41,10 @@ class Customers(models.Model):
     def __str__(self):
         return self.firstname
 
+class AddressManager(Manager):
+    def get_queryset(self, **kwargs):
+        return super(AddressManager, self).get_queryset().all()
+
 # Таблица "Адрес доставки"
 class Address(models.Model):
     street = models.CharField(max_length=50)
@@ -49,6 +53,9 @@ class Address(models.Model):
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
+    objects = Manager()
+    product_manager = AddressManager()
+
     class Meta:
         verbose_name = 'Address'
         verbose_name_plural = 'Addresses'
@@ -56,7 +63,9 @@ class Address(models.Model):
     def __str__(self):
         return self.street
 
-
+class ShipmentsManager(Manager):
+    def get_queryset(self, **kwargs):
+        return super(ShipmentsManager, self).get_queryset().all()
 
 # Таблица "Метод доставки"
 class Shipments(models.Model):
@@ -64,16 +73,25 @@ class Shipments(models.Model):
     created = CreationDateTimeField()
     modified = ModificationDateTimeField()
 
+    objects = Manager()
+    product_manager = ShipmentsManager()
+
     class Meta:
         verbose_name = 'Shipments'
         verbose_name_plural = 'Shipments'
     def __str__(self):
         return self.method
 
+class PaymentsManager(Manager):
+    def get_queryset(self, **kwargs):
+        return super(PaymentsManager, self).get_queryset().all()
 
 # таблица "Метод оплаты"
 class Payments(models.Model):
     payment = models.CharField(max_length=20)
+
+    objects = Manager()
+    product_manager = PaymentsManager()
 
     class Meta:
         verbose_name = 'Paymets'

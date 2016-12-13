@@ -4,7 +4,7 @@ from django.db.models import Avg, Count, F
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-
+from datetime import datetime
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import FormView
 
@@ -12,7 +12,7 @@ from django.shortcuts import render
 from carton.cart import Cart
 from eshop.models.products import Product, Category, Image
 from eshop.models.customers import Customers, Address, Shipments, Payments
-from eshop.models.orders import Orders
+from eshop.models.orders import Orders, OrderStatus
 from eshop.models.catalog import Catalog
 # from django.utils import simplejson
 # from jsonify.decorators import ajax_request
@@ -103,27 +103,18 @@ def main_page(request):
     if request.method == "GET":
         mainpage = []
         categories = Category.objects.exclude(id=1)
-        # print(categories.get_categories) #.objects.get(id=1)
         products = Product.objects.all()
         for i in products:
             if i.is_OnMainPage:
                 mainpage.append(i)
-            # if i.is_NewProduct:
-            #     new_prod = i
         return render(request, 'eshop/index.html', {'products': mainpage, 'categories': categories})
     return HttpResponse(status=405)
 
 def categories(request, tag):
     if request.method == 'GET':
         categories = Category.objects.exclude(id=1)
-
         cat = Category.objects.filter(tag=tag).values('id')
-
         product = Product.objects.filter(category=cat)
-        # new_prod = Product.objects.get(is_NewProduct=True)
-
-        # if not product:
-        #     raise Http404
         return render(request, 'eshop/subpage.html', {'products': product, 'categories': categories})
     return HttpResponse(status=405)
 
@@ -133,56 +124,56 @@ def order(request):
 
         customer_firstname = request.POST['firstname']
         customer_lastname = request.POST['lastname']
-        customr_email = request.POST['email']
+        customer_email = request.POST['email']
         customer_phone = request.POST['phone']
         customer_address = request.POST['address']
 
-        # get data from cart,  create customer
-        # for i in cart.items_serializable:
-        #     item_pk = i[0]
-        #     item_qw = i[1]
-            # print(
-            #     'product_id: ', item_pk,
-            #     'quantity: ', item_qw.get('quantity')
-            # )
-            # print(
-            #     customer_firstname,
-            #     customer_lastname,
-            #     customr_email,
-            #     customer_phone,
-            #     customer_address
-            # )
-
+        # get data from cart
+        for i in cart.items_serializable:
+            item_pk = i[0]
+            item_qw = i[1]
+            print(
+                'product_id: ', item_pk,
+                'quantity: ', item_qw.get('quantity')
+            )
+        # create customer
         address = Address(street=customer_address, building='12', appartment='12')
         address.save()
-
-        customer_shipment = 1
-        shipment = Shipments.objects.get(id=customer_shipment)
-
-        customer_payment = 1
-        payment = Payments.objects.get(id=customer_payment)
-
-        print(payment.payment, shipment.method)
-
-        customer = Customers(firstname=customer_firstname, lastname=customer_lastname,
-                     password='123', phone=customer_phone, birthdate='1975-10-10',
-                     address=address, shipment=shipment, payment=payment, customers=1)
-
-        print(customer.address)
+        shipment = Shipments.objects.get(pk=1)
+        payment = Payments.objects.get(pk=1)
+        customer = Customers(
+            firstname=customer_firstname,
+            lastname=customer_lastname,
+            password='123',
+            phone=customer_phone,
+            birthdate='1975-10-10',
+            email=customer_email,
+            payment=payment
+        )
         customer.save()
+        customer.address.add(address)
+        customer.shipment.add(shipment)
+        customer.save()
+        cart.clear()
+        # create order!
+        new_order = Orders(
+            customer=customer,
+            shipment=shipment,
+            payment=payment,
+            status=OrderStatus.objects.get(pk=1),
+            date=datetime.utcnow().date(),
+            is_payed=False
+        )
+        new_order.save()
+        print(new_order.id)
 
-        # create order
-
-        # print(customer_firstname, customer_lastname, customr_email, customer_phone, customer_address)
-        return render(request, 'eshop/order.html') #, {'products': product, 'categories': categories})
-        # return HttpResponse('OK!')
+        return render(request, 'eshop/order.html', {'order': new_order.id})
 
 def list_customers(request):
     if request.method == "GET":
         categories = Category.objects.all()
         products = Customers.objects.all()
         return render(request, 'eshop/index.html', {'products': products, 'categories': categories})
-        # return render(request, 'eshop/index.html', {'products': products, 'categories': categories })
     return HttpResponse(status=405)
 
 
@@ -197,5 +188,3 @@ class Registration(FormView):
         # It should return an HttpResponse.
         form.save()
         return super(Registration, self).form_valid(form)
-
-

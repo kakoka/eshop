@@ -6,14 +6,8 @@
 {% block content %}
 
 <script>
-{#    simpleCart.save();#}
-{#    simpleCart.empty();#}
-</script>
-
-<script>
   $( function() {
     var dialog, form,
-      // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
       emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
       firstname = $( "#firstname" ),
       lastname = $( "#lastname" ),
@@ -53,6 +47,10 @@
       }
     }
 
+    $( "#create-user" ).button().on( "click", function() {
+      dialog.dialog( "open" );
+    });
+
     function createOrder() {
       var valid = true;
       allFields.removeClass( "ui-state-error" );
@@ -77,10 +75,10 @@
         dataType: 'html', // тип данных в ожидаемом ответе
         success: function (results) {
             console.log(results);
+            simpleCart.empty();
             }
         });
 
-        // alert(name.val() + email.val() + address.val());
         dialog.dialog( "close" );
       }
       return valid;
@@ -100,16 +98,17 @@
       close: function() {
         form[ 0 ].reset();
         allFields.removeClass( "ui-state-error" );
+        $("table#remove").empty();
+        $("h4#remove").empty();
+        $("#create-user").html("<a href='/products'>Вернуться в магазин</a>");
+        $("#create-user").removeAttr("id");
+        $("div#dialog-form").remove();
       }
     });
 
     form = dialog.find( "form" ).on( "submit", function( event ) {
       event.preventDefault();
-      addUser();
-    });
-
-    $( "#create-user" ).button().on( "click", function() {
-      dialog.dialog( "open" );
+      createOrder();
     });
   } );
   </script>
@@ -119,8 +118,8 @@
     </div>
 <div id="templatemo_right_panel">
 <div class="templatemo_right_panel_fullwidth">
-<h3>Оформление заказа</h3>
-    <table class="ui-widget ui-widget-content">
+<h3 id="change">Оформление заказа</h3>
+    <table class="ui-widget ui-widget-content" id="remove">
     <thead>
     <tr class="ui-widget-header">
         <th>Товар</th>
@@ -139,7 +138,7 @@
         {% endfor %}
     </tbody>
     </table>
-    Итого: {{ cart.total }}
+    <h4 id="remove">Итого: {{ cart.total }}</h4>
     </div>
     <button id="create-user" class="ui-button ui-corner-all ui-widget">Оформить</button>
 </div>
@@ -168,5 +167,3 @@
   </form>
 </div>
 {% endblock %}
-
-
