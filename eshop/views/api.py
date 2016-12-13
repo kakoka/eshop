@@ -1,22 +1,11 @@
-from django.core.urlresolvers import reverse
-from django.db import transaction
-from django.db.models import Avg, Count, F
-from django.http import HttpResponse, Http404
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
-
-from rest_framework import generics
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from carton.cart import Cart
+from django.http import Http404
 from rest_framework import status
-
-from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from eshop.models.products import Product
 from eshop.serializers import CartSerializer
-
-from carton.cart import Cart
 
 
 
