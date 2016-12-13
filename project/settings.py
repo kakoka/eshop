@@ -30,8 +30,10 @@ DEBUG404 = True
 ALLOWED_HOSTS = []
 
 INTERNAL_IPS = (
-   # '0.0.0.0',
-   '127.0.0.1',
+    # '*',
+    '0.0.0.0',
+    'eshop-kakoka.herokuapp.com'
+   # '127.0.0.1',
 )
 
 # Application definition
@@ -47,7 +49,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'sorl.thumbnail',
     # 'url_tools',
-    'debug_toolbar',
+    # 'debug_toolbar',
     # www e-shop project app
     'carton',
     # 'absoluteurl',
@@ -63,7 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # debug
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     #put, delete
     # 'eshop.middleware.HttpPostTunnelingMiddleware',
 ]
@@ -107,6 +109,10 @@ DATABASES = {
     }
 }
 
+import dj_database_url
+
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

@@ -100,9 +100,11 @@
         allFields.removeClass( "ui-state-error" );
         $("table#remove").empty();
         $("h4#remove").empty();
+        $("h3#change").text("Ваш заказ создан!");
         $("#create-user").html("<a href='/products'>Вернуться в магазин</a>");
         $("#create-user").removeAttr("id");
         $("div#dialog-form").remove();
+          simpleCart.empty();
       }
     });
 
