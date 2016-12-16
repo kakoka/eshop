@@ -27,14 +27,11 @@ SECRET_KEY = 'r#d-n%s$s71z3%262q@xwt2_iam56*733z0lky)uz5s&tv*st+'
 DEBUG = True
 DEBUG404 = True
 
-ALLOWED_HOSTS = []
-
-INTERNAL_IPS = (
-    # '*',
+ALLOWED_HOSTS = [
+    '127.0.0.1',
     '0.0.0.0',
     'eshop-kakoka.herokuapp.com',
-   # '127.0.0.1',
-)
+]
 
 # Application definition
 
