@@ -1,23 +1,14 @@
-from django.core.urlresolvers import reverse
-from django.db import transaction
-from django.db.models import Avg, Count, F
-from django.http import HttpResponse, Http404, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
 from datetime import datetime
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import FormView
-
-from django.shortcuts import render
 from carton.cart import Cart
-from eshop.models.products import Product, Category, Image
+from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import FormView
 from eshop.models.customers import Customers, Address, Shipments, Payments
 from eshop.models.orders import Orders, OrderStatus
-from eshop.models.catalog import Catalog
-# from django.utils import simplejson
-# from jsonify.decorators import ajax_request
-from django.views.decorators.csrf import csrf_exempt
-import copy
+from eshop.models.products import Product, Category
+
 # Create your views here.
 
 

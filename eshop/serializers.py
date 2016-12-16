@@ -1,6 +1,3 @@
-from django.contrib.auth.models import User, Group, Permission
-from eshop.models.products import Product, Image, Category, Suppliers
-
 from carton.cart import Cart
 from rest_framework import serializers
 
