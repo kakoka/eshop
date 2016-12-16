@@ -152,7 +152,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     'static/',
-    'bower_components/',
+    'bower_components/'
 ]
 
 CART_PRODUCT_MODEL = 'eshop.models.products.Product'
