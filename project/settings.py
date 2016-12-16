@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 INTERNAL_IPS = (
     # '*',
     '0.0.0.0',
-    'eshop-kakoka.herokuapp.com'
+    'eshop-kakoka.herokuapp.com',
    # '127.0.0.1',
 )
 
