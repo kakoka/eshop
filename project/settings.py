@@ -147,13 +147,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = BASE_DIR + '/static/img/upload'
+MEDIA_URL = '/img/'
 
-STATICFILES_DIRS = [
-    'static/',
-    'bower_components/'
-]
+STATIC_URL = '/static/'
+
+if DEBUG:
+    STATICFILES_DIRS = [
+        'bower_components/',
+        'static/',
+    ]
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 CART_PRODUCT_MODEL = 'eshop.models.products.Product'
 
@@ -161,5 +167,4 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-MEDIA_ROOT = BASE_DIR + '/static/img/upload'
-MEDIA_URL = '/img/'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
